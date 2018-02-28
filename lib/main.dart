@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
 
 void main()=>runApp(new MyApp());
 
@@ -6,22 +7,81 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+//    final wordPair=new WordPair.random();
+
     return new MaterialApp(
       title: 'my',
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text("标题"),
-        ),
-        body: new Center(
-          child: new Text("内容"),
-        ),
-      ),
+//      home: new Scaffold(
+//        appBar: new AppBar(
+//          title: new Text("标题"),
+//        ),
+//        body: new Center(
+////          child: new Text("内容:"+wordPair.asPascalCase),
+//
+//          child: new RandomWords(),
+//        ),
+//      ),
+      home: new RandomWords(),
     );
   }
 
 }
 
 
+class RandomWords extends StatefulWidget{
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return new RandomWordsState();
+  }
+
+}
+
+class RandomWordsState extends State<RandomWords>{
+
+  final _pairs= <WordPair>[];
+  final _font=const TextStyle(fontSize: 18.0);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+//    final wordPair=new WordPair.random();
+//    return new Text("内容:"+wordPair.asPascalCase);
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('listView'),
+      ),
+      body: _buildList(), //实现无限滑动listview
+    );
+  }
+
+  Widget _buildList(){
+    return new ListView.builder(
+      padding: const EdgeInsets.all(14.0),
+      itemBuilder: (context,i){
+        if(i.isOdd){
+          return new Divider();
+        }
+        final index=i ~/ 2;
+        if(index>=_pairs.length){
+          _pairs.addAll(generateWordPairs().take(10));
+        }
+        return _buildIiem(_pairs[index]);
+      },
+    );
+  }
+
+  Widget _buildIiem(WordPair pair){
+    return new ListTile(
+      title: new Text(
+        pair.asPascalCase,
+        style: _font,
+      ),
+    );
+  }
+
+}
 
 //import 'package:flutter/material.dart';
 //
