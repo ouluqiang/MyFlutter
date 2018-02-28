@@ -52,8 +52,40 @@ class RandomWordsState extends State<RandomWords>{
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('listView'),
+        actions: <Widget>[
+          new IconButton(icon: new Icon(Icons.list), onPressed: _pushSave)
+        ],
       ),
       body: _buildList(), //实现无限滑动listview
+    );
+  }
+
+  void _pushSave(){
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+          builder: (context){
+            final tiles=_save.map(
+                    (pair){
+                  return new ListTile(
+                    title: new Text(
+                      pair.asPascalCase,
+                      style: _font,
+                    ),
+                  );
+                }
+            );
+            final divide=ListTile.divideTiles(
+                context:context,
+                tiles: tiles,
+            ).toList();
+            return new Scaffold(
+              appBar: new AppBar(
+                title: new Text('新界面'),
+              ),
+              body: new ListView(children: divide,),
+            );
+          },
+      ),
     );
   }
 
@@ -97,6 +129,7 @@ class RandomWordsState extends State<RandomWords>{
   }
 
 }
+
 
 //import 'package:flutter/material.dart';
 //
