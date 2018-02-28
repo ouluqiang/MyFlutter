@@ -40,8 +40,9 @@ class RandomWords extends StatefulWidget{
 
 class RandomWordsState extends State<RandomWords>{
 
-  final _pairs= <WordPair>[];
-  final _font=const TextStyle(fontSize: 18.0);
+  final _pairs= <WordPair>[]; //list集合值
+  final _save=new Set<WordPair>(); //收藏的集合值
+  final _font=const TextStyle(fontSize: 18.0);//设置文字大小
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +74,25 @@ class RandomWordsState extends State<RandomWords>{
   }
 
   Widget _buildIiem(WordPair pair){
+    final isSave=_save.contains(pair);
     return new ListTile(
       title: new Text(
         pair.asPascalCase,
         style: _font,
       ),
+      trailing: new Icon(
+        isSave? Icons.favorite:Icons.favorite_border,
+        color: isSave?Colors.red:null,
+      ),
+      onTap: (){
+        setState((){
+          if(isSave){
+            _save.remove(pair);
+          }else{
+            _save.add(pair);
+          }
+        });
+      },
     );
   }
 
