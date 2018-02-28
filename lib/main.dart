@@ -11,6 +11,9 @@ class MyApp extends StatelessWidget{
 
     return new MaterialApp(
       title: 'my',
+      theme: new ThemeData(
+        primaryColor: Colors.red,
+      ),
 //      home: new Scaffold(
 //        appBar: new AppBar(
 //          title: new Text("标题"),
