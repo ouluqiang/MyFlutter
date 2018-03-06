@@ -1,12 +1,5 @@
-import 'dart:async';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
-import 'widget/NavigationIconView.dart';
-import 'widget/MyListView.dart';
-import 'widget/MyListItem.dart';
-import 'loader/HttpLoader.dart';
-
+import 'package:my_flutter/widget/NavigationIconView.dart';
 
 void main() => runApp(new RunApp());
 
@@ -16,7 +9,6 @@ class RunApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
     return new MyApp();
   }
 
@@ -26,89 +18,17 @@ class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-
     return new MyAppState();
   }
 
 }
-class MyFile extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-
-    return new MyFileState();
-  }
-
-}
-
-
-
-class MyFileState extends State<MyFile> {
-
-  int _count;
-
-  Future<int> _getReadFile() async{
-    try {
-      File file = await _getLoadFile();
-      String s = await file.readAsString();
-      return int.parse(s);
-    }catch(e){
-      return 0;
-    }
-  }
-
- Future<File> _getLoadFile() async {
-    String dir=(await getApplicationDocumentsDirectory()).path;//文件目录
-    print(dir);
-    return new File('$dir/z.txt');
-  }
-  Future<Null> _getWrite() async {
-    setState((){
-      _count++;
-    });
-    await (await _getLoadFile()).writeAsString('$_count');
-  }
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getReadFile().then((int count){
-      this._count=count;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return new GestureDetector(
-      child: new Text('${_count==null?0:'$_count'}?'),
-      onTap: _getWrite,
-    );
-  }
-
-
-
-}
-
-
-
 
 class MyAppState extends State<MyApp> {
-  String s='';
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    get().then((value)=> this.s=value);
-  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     MyTab myTab = new MyTab();
-
     return new MaterialApp(
       title: 'home',
       theme: new ThemeData(
@@ -127,38 +47,15 @@ class MyAppState extends State<MyApp> {
           children: <Widget>[
             new Text("diyige"),
             new Text("diyige"),
-            new Text("$s"),
-            new MyFile(),
+            new Text("diyige"),
           ],
         ),
-//        body: new MyListView(
-//          users: userList,
-//        ),
         bottomNavigationBar: myTab,
       ),
     );
   }
 
 }
-
-
-
-
-
-
-
-final List<User> userList = <User>[
-  new User(name: '生存100天', age: 18),
-  new User(name: '大学毕业',age: 18),
-  new User(name: '获得￥5000', age: 18),
-  new User(name: '购买廉价的公寓', age: 18),
-  new User(name: '购买普通的公寓', age: 18),
-  new User(name: '生存100天', age: 18),
-  new User(name: '大学毕业', age: 18),
-  new User(name: '获得￥5000', age: 18),
-  new User(name: '购买廉价的公寓', age: 18),
-  new User(name: '购买普通的公寓',age: 18),
-];
 
 
 class MyTab extends StatefulWidget {
@@ -174,7 +71,7 @@ class MyIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    // 获取当前图标主题，创建与此图标主题相同的图标主题 
+    // 获取当前图标主题，创建与此图标主题相同的图标主题
     final IconThemeData iconTheme = IconTheme.of(context);
     return new Container(
       margin: const EdgeInsets.all(4.0),
@@ -443,7 +340,7 @@ class MyPopupMenuState extends State<MyPopupMenu>
 ////          child: new MyBody(),
 ////          child: new MyButton(),
 ////          child: new MyEdite(),
-//        
+//
 ////          child: new Row(
 ////            children: <Widget>[
 //////               new MyButton(),
@@ -451,7 +348,7 @@ class MyPopupMenuState extends State<MyPopupMenu>
 ////
 ////            ],
 ////          ),
-//        
+//
 ////          child: new MyListView(
 ////            users: <User>[
 ////              new User(name: "user1"),
@@ -459,7 +356,7 @@ class MyPopupMenuState extends State<MyPopupMenu>
 ////              new User(name: "user3"),
 ////            ],
 ////          ),
-//        
+//
 ////          child: new ListView(
 ////            scrollDirection: Axis.horizontal,
 ////            children: <Widget>[
@@ -505,7 +402,7 @@ class MyPopupMenuState extends State<MyPopupMenu>
 ////              ),
 ////            ],
 ////          ),
-//        
+//
 //          child: new ListView.builder(
 //              itemCount: messages.length,
 //              itemBuilder:(context,index){
@@ -753,7 +650,7 @@ class MyPopupMenuState extends State<MyPopupMenu>
 //      _number++;
 //    });
 //  }
-//  
+//
 //  @override
 //  Widget build(BuildContext context) {
 //    // TODO: implement build
