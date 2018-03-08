@@ -63,3 +63,8 @@ flutter:
   # see https://flutter.io/custom-fonts/#from-packages
   assets:
     - asset/images/launch.png
+    - asset/images/head.png
+    - asset/images/phone.png
+    - asset/images/password.png
+
+

@@ -1,11 +1,16 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'loader/FileLoader.dart';
 import 'widget/NavigationIconView.dart';
 import 'widget/MyListView.dart';
 import 'widget/MyListItem.dart';
 import 'loader/HttpLoader.dart';
+import 'widget/MyProgressBar.dart';
+
+
+
+
+import 'person/Login.dart';
 
 
 void main() => runApp(new RunApp());
@@ -17,7 +22,9 @@ class RunApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    return new MyApp();
+//    return new MyApp();
+
+    return new MyLogin();
   }
 
 }
@@ -29,66 +36,6 @@ class MyApp extends StatefulWidget {
 
     return new MyAppState();
   }
-
-}
-class MyFile extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-
-    return new MyFileState();
-  }
-
-}
-
-
-
-class MyFileState extends State<MyFile> {
-
-  int _count;
-
-  Future<int> _getReadFile() async{
-    try {
-      File file = await _getLoadFile();
-      String s = await file.readAsString();
-      return int.parse(s);
-    }catch(e){
-      return 0;
-    }
-  }
-
- Future<File> _getLoadFile() async {
-    String dir=(await getApplicationDocumentsDirectory()).path;//文件目录
-    print(dir);
-    return new File('$dir/z.txt');
-  }
-  Future<Null> _getWrite() async {
-    setState((){
-      _count++;
-    });
-    await (await _getLoadFile()).writeAsString('$_count');
-  }
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getReadFile().then((int count){
-      this._count=count;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return new GestureDetector(
-      child: new Text('${_count==null?0:'$_count'}?'),
-      onTap: _getWrite,
-    );
-  }
-
-
 
 }
 
@@ -115,6 +62,7 @@ class MyAppState extends State<MyApp> {
         primaryColor: Colors.red,
       ),
       home: new Scaffold(
+
         appBar: new AppBar(
           centerTitle: true, //标题居中
           title: new Text("标题"),
@@ -124,11 +72,16 @@ class MyAppState extends State<MyApp> {
           ],
         ),
         body: new Column(
+
           children: <Widget>[
             new Text("diyige"),
             new Text("diyige"),
             new Text("$s"),
             new MyFile(),
+            new MyProgressBar(
+              max: 100,
+              min: 50,
+            )
           ],
         ),
 //        body: new MyListView(
