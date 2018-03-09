@@ -1,26 +1,62 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 
-class MyLogin extends StatelessWidget {
-  
-  void _handLogin(){
-    
+class MyLogin extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return new MyLoginState();
   }
-  
+
+}
+
+class MyLoginState extends State<MyLogin> {
+
+
+  String _phone;
+  String _password;
+
+  void _handLogin() {
+    showDialog<Null>(
+        context: context,
+        child: new AlertDialog(
+          title: new Text('标的'),
+          content: new Text('${_phone}---${_password}'),
+          actions: <Widget>[
+            new FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: new Text('确定')
+            ),
+            new FlatButton(onPressed: (){
+              Navigator.pop(context);
+            }, child: new Text('取消'))
+          ],
+        )
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new MaterialApp(
-      title: 'login',
-      home: new Scaffold(
+    final ThemeData theme = Theme.of(context);
+    final TextStyle textStyle = theme.textTheme.caption.copyWith(
+        color: theme.textTheme.caption.color, fontSize: 18.0);
+
+    return new Scaffold(
         appBar: new AppBar(
           centerTitle: true,
           title: new Text('登录'),
         ),
+
         body: new ListView(
           children: <Widget>[
             new Container(
-              margin: const EdgeInsets.all(50.0),
+              margin: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 20.0),
               alignment: Alignment.center,
               child: new Image.asset('asset/images/head.png'),
 
@@ -32,14 +68,16 @@ class MyLogin extends StatelessWidget {
                   new Image.asset(
                     'asset/images/phone.png',
                     width: 22.0,
-//                      height: 30.0,
-//                          fit: BoxFit.fill,
+                    fit: BoxFit.fill,
                     alignment: Alignment.bottomCenter,),
                   new Flexible(
-
                     child: new Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
-                     child: new TextField( //输入框控件
+                      child: new TextField( //输入框控件
+
+                        onChanged: (str) {
+                          _phone = str;
+                        },
 
                         decoration: new InputDecoration(
 //                            border: InputBorder.none,  //隐藏下滑线
@@ -49,28 +87,26 @@ class MyLogin extends StatelessWidget {
                         ),
                         maxLength: 11,
                         maxLines: 1,
-                        style: new TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.red
-                        ),
+                        style: textStyle
+                        ,
                       ),
-                    )
+                    ),
+
 
                   ),
 
                 ],
               ),
             ),
-
             new Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
               child: new Row(
 
                 children: <Widget>[
                   new Image.asset(
-                      'asset/images/password.png',
+                    'asset/images/password.png',
                     width: 22.0,
-                      height: 26.0,
+                    height: 26.0,
                     fit: BoxFit.fill,
 //                    alignment: Alignment.bottomCenter,
                   ),
@@ -79,17 +115,20 @@ class MyLogin extends StatelessWidget {
                       child: new Padding(
                         padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
                         child: new TextField(
-                          obscureText: true, //输入密码显示·
+                          onChanged: (str) {
+                            _password = str;
+                          },
+                          obscureText: true,
+                          //输入密码显示·
                           maxLines: 1,
                           maxLength: 16,
                           decoration: new InputDecoration(
                             hintText: '请输入密码',
                             labelText: '密码',
                           ),
-                          style: new TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.red
-                          ),
+
+                          style: textStyle,
+
                         ),
                       )
 
@@ -100,30 +139,27 @@ class MyLogin extends StatelessWidget {
             ),
             new Container(
               margin: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 40.0),
-
-              child:new Material(
-                borderRadius: new BorderRadius.circular(10.0),
-                child: new RaisedButton(
-                  padding: const EdgeInsets.fromLTRB(0.0, 14.0, 0.0, 14.0),
-                  onPressed: _handLogin,
-
-                  child: new Text(
-                    '登录',
-                    style: new TextStyle(
-                      fontSize: 18.0,
-                        color: Colors.white,
-
-                    ),
+              child: new RaisedButton(
+                padding: const EdgeInsets.fromLTRB(0.0, 14.0, 0.0, 14.0),
+                onPressed: _handLogin,
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(10.0),
+                ),
+                child: new Text(
+                  '登录',
+                  style: theme.textTheme.caption.copyWith(
+                    color: Colors.white,
+                    fontSize: 18.0,
                   ),
-                  color: Colors.blue,
+                ),
+                color: Colors.blue,
 
-                ) ,
-              ) ,
+              ),
             )
 
           ],
         ),
-    
+
 //        body: new Column(
 //          children: <Widget>[
 //            new Container(
@@ -183,7 +219,6 @@ class MyLogin extends StatelessWidget {
 //
 //          ],
 //        ),
-      ),
     );
   }
 

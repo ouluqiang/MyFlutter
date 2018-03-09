@@ -9,8 +9,13 @@ import 'widget/MyProgressBar.dart';
 
 
 
+import 'Da.dart';
+
+
+
 
 import 'person/Login.dart';
+import 'home/HomePage.dart';
 
 
 void main() => runApp(new RunApp());
@@ -21,10 +26,20 @@ class RunApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
+    return new MaterialApp(
+      title: 'app',
+      theme: new ThemeData(
+        primaryColor: Colors.red,
+      ),
+      home: new MyApp(),
+//      home: new MyLogin(),
+    );
 //    return new MyApp();
 
-    return new MyLogin();
+//    return new MyLogin();
+//    return new MyHome();
+
+//    return new MyDaXian();
   }
 
 }
@@ -48,7 +63,24 @@ class MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    get().then((value)=> this.s=value);
+    get().then((String value){
+      setState((){
+        this.s=value;
+      });
+    });
+  }
+
+  Future<Null> _incrementCounter() async{
+    return  showDialog(context: context,child:new AlertDialog(
+      title: const Text("Dialog"),
+      content: new Text("This is a Test Dialog!"),
+      actions: <Widget>[
+        new FlatButton(onPressed: (){
+          Navigator.pop(context);
+//          toast("Dismiss");
+        }, child: const Text("OK"))
+      ],
+    ));
   }
 
   @override
@@ -56,13 +88,12 @@ class MyAppState extends State<MyApp> {
     // TODO: implement build
     MyTab myTab = new MyTab();
 
-    return new MaterialApp(
-      title: 'home',
-      theme: new ThemeData(
-        primaryColor: Colors.red,
-      ),
-      home: new Scaffold(
-
+    return  new Scaffold(
+        floatingActionButton: new FloatingActionButton(
+            onPressed:_incrementCounter,
+          tooltip: 'Increment',
+          child: new Icon(Icons.add),
+        ),
         appBar: new AppBar(
           centerTitle: true, //标题居中
           title: new Text("标题"),
@@ -72,7 +103,6 @@ class MyAppState extends State<MyApp> {
           ],
         ),
         body: new Column(
-
           children: <Widget>[
             new Text("diyige"),
             new Text("diyige"),
@@ -88,7 +118,6 @@ class MyAppState extends State<MyApp> {
 //          users: userList,
 //        ),
         bottomNavigationBar: myTab,
-      ),
     );
   }
 
@@ -1057,3 +1086,5 @@ class MyPopupMenuState extends State<MyPopupMenu>
 //    );
 //  }
 //}
+
+
