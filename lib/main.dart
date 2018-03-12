@@ -12,10 +12,8 @@ import 'widget/MyProgressBar.dart';
 import 'Da.dart';
 
 
+import 'view/home/Launch.dart';
 
-
-import 'person/Login.dart';
-import 'home/HomePage.dart';
 
 
 void main() => runApp(new RunApp());
@@ -31,8 +29,8 @@ class RunApp extends StatelessWidget {
       theme: new ThemeData(
         primaryColor: Colors.red,
       ),
-      home: new MyApp(),
-//      home: new MyLogin(),
+      home: new MyLaunch(),
+//      home: new MyApp(),
     );
 //    return new MyApp();
 
