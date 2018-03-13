@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../person/Login.dart';
 import 'dart:async';
+import 'package:my_flutter/loader/HttpLoader.dart';
+import 'HomePage.dart';
 
 
 class MyLaunch extends StatefulWidget{
@@ -24,23 +26,20 @@ class MyLaunchState extends State<MyLaunch>{
     super.initState();
      timer= new Timer(const Duration(seconds: 5), (){
       print(timer.tick);
-      _handNavigator();
-      setState((){
-        this.se=timer.tick;
-      });
+      getPushReplacementNavigator(context,new MyHomePage());
     });
   }
 
 
 
-  _handNavigator(){
-    Navigator.pushReplacement(
-        context,
-        new MaterialPageRoute(builder: (BuildContext context){
-          return new MyLogin();
-        })
-    );
-  }
+//  _handNavigator(){
+//    Navigator.pushReplacement(
+//        context,
+//        new MaterialPageRoute(builder: (BuildContext context){
+//          return new MyLogin();
+//        })
+//    );
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +57,7 @@ class MyLaunchState extends State<MyLaunch>{
           alignment: Alignment.topRight,
           margin: const EdgeInsets.fromLTRB(0.0, 50.0, 25.0, 0.0),
           child: new RaisedButton(
-            onPressed: _handNavigator,
+            onPressed: ()=>getPushReplacementNavigator(context,new MyLogin()),
 //            child: new Text('跳过 ${se}'),
             shape: new RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(12.0),

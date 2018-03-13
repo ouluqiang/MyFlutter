@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage>  {
 
   void toast(String text)async{
     Map<String,String> data={"text":text};
-    await methodChannel.invokeMethod("showToast",data);
+    String s=await methodChannel.invokeMethod("showToast",data);
   }
 
   Widget getRow(int i){

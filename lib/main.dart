@@ -56,17 +56,7 @@ class MyApp extends StatefulWidget {
 
 
 class MyAppState extends State<MyApp> {
-  String s='';
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    get().then((String value){
-      setState((){
-        this.s=value;
-      });
-    });
-  }
+
 
   Future<Null> _incrementCounter() async{
     return  showDialog(context: context,child:new AlertDialog(
@@ -104,7 +94,7 @@ class MyAppState extends State<MyApp> {
           children: <Widget>[
             new Text("diyige"),
             new Text("diyige"),
-            new Text("$s"),
+//            new Text("$s"),
             new MyFile(),
             new MyProgressBar(
               max: 100,

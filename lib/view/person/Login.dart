@@ -2,11 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter/services.dart';
-import 'package:my_flutter/loader/AppConfig.dart';
+import 'package:my_flutter/loader/HttpConfig.dart';
 import 'dart:convert';
 import '../home/HomePage.dart';
 import 'Register.dart';
 import 'ForgetPassword.dart';
+import 'dart:math';
+import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/loader/HttpLoader.dart';
 
 class MyLogin extends StatefulWidget {
   @override
@@ -20,49 +23,50 @@ class MyLogin extends StatefulWidget {
 
 class MyLoginState extends State<MyLogin> {
 
-  String _phone;
-  String _password;
+  String _phone='';
+  String _password='';
+
+//  MethodChannel methodChannel=new MethodChannel(METHOD);
+
+//  _handToast(String text)async {
+//    try {
+//      String s = await methodChannel.invokeMethod(TOAST, text);
+//      print(s);
+//    }on PlatformException catch(e){
+//
+//    }
+//  }
 
   _handLogin() async {
     if (_phone.isEmpty) {
+      handToast(USERNAME_NULL_NOT);
+
       return;
     }
     if (_password.isEmpty) {
+      handToast(PASSWORD_NULL_NOT);
       return;
     }
-    showDialog(
-        context: context,
-        child: new AlertDialog(
-          title: new Container(
-            padding: const EdgeInsets.fromLTRB(100.0, 0.0, 100.0, 0.0),
-            child: new CircularProgressIndicator(),
-          ),
-          content: new Container(
-            alignment: Alignment.center,
-            child: new Text('正在加载'),
-            height: 26.0,
-          ),
-
-        )
-    );
+    getLogin(context, _phone, _password);
 //    var body = JSON.encode({'username': 'a1', 'password': '123456'});
 //    print(body.toString());
-    var url = LOGIN + '?username=' + _phone + '&password=' + _password;
-    Future<Response> response = get(url, headers: httpHeads);
-    response.then((response) {
-      print(response.body);
-      Navigator.pop(context);
-      Navigator.pushReplacement(
-          context,
-          new MaterialPageRoute(
-              builder: (BuildContext context) {
-                return new MyHome();
-              }
-          )
-      );
-    }).catchError(() {
-      Navigator.of(context).pop();
-    });
+//    var url = LOGIN + '?username=' + _phone + '&password=' + _password;
+//    Future<Response> response = get(url, headers: HEADS);
+//    response.then((response) async {
+//      print(response.body);
+//      Navigator.pop(context);
+//      Navigator.pushReplacement(
+//          context,
+//          new MaterialPageRoute(
+//              builder: (BuildContext context) {
+//                return new MyHomePage();
+//              }
+//          )
+//      );
+//    }).catchError(() {
+//      Navigator.of(context).pop();
+//      methodChannel.invokeMethod('toast','密码错误');
+//    });
 //    Response response=await createHttpClient().get(
 //        LOGIN+'?username='+_phone+'&password='+_password,
 //        headers:httpHeads,
@@ -96,17 +100,17 @@ class MyLoginState extends State<MyLogin> {
 
   }
 
-  _handNavigator(bool isRegister){
-    Navigator.push(context,
-      new MaterialPageRoute(builder: (BuildContext context){
-        if(isRegister){
-          return new MyRegister();
-        }else{
-          return new MyForgetPassword();
-        }
-      })
-    );
-  }
+//  _handNavigator(bool isRegister){
+//    Navigator.push(context,
+//      new MaterialPageRoute(builder: (BuildContext context){
+//        if(isRegister){
+//          return new MyRegister();
+//        }else{
+//          return new MyForgetPassword();
+//        }
+//      })
+//    );
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +221,7 @@ class MyLoginState extends State<MyLogin> {
                   ),
                   onTap: () {
                     print('注册');
-                    _handNavigator(true);
+                    getPushNavigator(context, new MyRegister());
                   },
                 ),
               ),
@@ -230,7 +234,7 @@ class MyLoginState extends State<MyLogin> {
                         child: new Text('忘记密码?'),
                         onTap: () {
                           print('忘记密码');
-                          _handNavigator(false);
+                          getPushNavigator(context, new MyForgetPassword());
                         },
                       ),
                     )

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter/services.dart';
-import 'package:my_flutter/loader/AppConfig.dart';
+import 'package:my_flutter/loader/HttpConfig.dart';
 import 'dart:convert';
 import '../home/HomePage.dart';
 
@@ -46,7 +46,7 @@ class MyForgetPasswordState extends State<MyForgetPassword> {
 //    var body = JSON.encode({'username': 'a1', 'password': '123456'});
 //    print(body.toString());
     var url = LOGIN + '?username=' + _phone + '&password=' + _password;
-    Future<Response> response = get(url, headers: httpHeads);
+    Future<Response> response = get(url, headers: HEADS);
     response.then((response) {
       print(response.body);
       Navigator.pop(context);
@@ -54,7 +54,7 @@ class MyForgetPasswordState extends State<MyForgetPassword> {
           context,
           new MaterialPageRoute(
               builder: (BuildContext context){
-                return new MyHome();
+                return new MyHomePage();
               }
         )
       );
