@@ -57,7 +57,7 @@ getLoad(BuildContext context) {
 }
 
 
-getLogin(BuildContext context, String phone, String password,) {
+getLogin(BuildContext context, String phone, String password) {
   getLoad(context);
   var url = LOGIN + '?username=' + phone + '&password=' + password;
   Future<Response> response = get(url, headers: HEADS);
@@ -65,6 +65,7 @@ getLogin(BuildContext context, String phone, String password,) {
     print(response.body);
     getPopNavigator(context);
     getPushReplacementNavigator(context, new MyHomePage());
+
   }).catchError(() {
     getPopNavigator(context);
   });

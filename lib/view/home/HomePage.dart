@@ -16,14 +16,37 @@ class MyHomePage extends StatefulWidget {
 
 }
 
-class MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
 
   List<BottomNavigationBarItem> items;
   int _index = 0;
+  List<Tab> tabs;
+  TabController tabController;
 
-  Widget _getWidget() {
+  Widget _getButton(){
     if (_index == 0) {
-      return new Text('第一个');
+      return new TabBar(
+        tabs: tabs,
+        controller: tabController,
+//          isScrollable: true,
+      );
+    }else{
+      return null;
+    }
+
+  }
+
+  Widget _getBody() {
+    if (_index == 0) {
+      return new TabBarView(
+        controller: tabController,
+          children: <Widget>[
+            new Text('第一个12231'),
+            new Text('第一个12'),
+            new Text('第一个312312'),
+            new Text('第一个12312313'),
+          ],
+      );
     } else if (_index == 1) {
       return new Text('第2个');
     } else {
@@ -49,6 +72,33 @@ class MyHomePageState extends State<MyHomePage> {
         title: new Text('阿三'),
       ),
     ];
+    tabs=<Tab>[
+      new Tab(
+        text: '第一个',
+        icon: new Icon(Icons.title),
+      ),
+      new Tab(
+        text: '第一个',
+        icon: new Icon(Icons.title),
+      ),
+      new Tab(
+        text: '第一个',
+        icon: new Icon(Icons.title),
+      ),
+      new Tab(
+        text: '第一个',
+        icon: new Icon(Icons.title),
+      ),
+
+    ];
+    tabController=new TabController(length: tabs.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,6 +108,7 @@ class MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         centerTitle: true,
         title: new Text('首页'),
+        bottom: _getButton(),
       ),
       bottomNavigationBar: new BottomNavigationBar(
         items: items,
@@ -119,14 +170,8 @@ class MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      endDrawer: new Drawer(
-        child: new ListView(
-          children: <Widget>[
-            new Image.asset('asset/images/head.png')
-          ],
-        ),
-      ),
-      body: _getWidget(),
+
+      body: _getBody(),
     );
   }
 

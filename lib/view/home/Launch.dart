@@ -5,7 +5,7 @@ import 'package:my_flutter/loader/HttpLoader.dart';
 import 'HomePage.dart';
 
 
-class MyLaunch extends StatefulWidget{
+class MyLaunch extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -15,21 +15,28 @@ class MyLaunch extends StatefulWidget{
 }
 
 
-class MyLaunchState extends State<MyLaunch>{
+class MyLaunchState extends State<MyLaunch> {
 
-  int se;
+  int se = 4;
   Timer timer;
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-     timer= new Timer(const Duration(seconds: 5), (){
-      print(timer.tick);
-      getPushReplacementNavigator(context,new MyHomePage());
+    timer = new Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      print('${timer.tick}----${se}');
+      if (se == 1) {
+        timer.cancel();
+        getPushReplacementNavigator(context, new MyHomePage());
+      } else {
+        setState(() {
+          this.se--;
+        });
+      }
     });
   }
-
 
 
 //  _handNavigator(){
@@ -52,13 +59,14 @@ class MyLaunchState extends State<MyLaunch>{
     return new Stack(
       fit: StackFit.passthrough,
       children: <Widget>[
-        new Image.asset('asset/images/launch.png',fit: BoxFit.fill,),
+        new Image.asset('asset/images/launch.png', fit: BoxFit.fill,),
         new Container(
           alignment: Alignment.topRight,
           margin: const EdgeInsets.fromLTRB(0.0, 50.0, 25.0, 0.0),
           child: new RaisedButton(
-            onPressed: ()=>getPushReplacementNavigator(context,new MyLogin()),
-//            child: new Text('跳过 ${se}'),
+            onPressed: () =>
+                getPushReplacementNavigator(context, new MyLogin()),
+            child: new Text('跳过 ${se}'),
             shape: new RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(12.0),
             ),
