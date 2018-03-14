@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'HttpConfig.dart';
 import 'package:my_flutter/view/home/HomePage.dart';
+import 'package:my_flutter/bean/BaseBean.dart';
 
 /**
  * 跳转界面
@@ -70,3 +72,16 @@ getLogin(BuildContext context, String phone, String password) {
     getPopNavigator(context);
   });
 }
+getXinwen(BuildContext context, String category, String min_behot_time,String last_refresh_sub_entrance_interval,String loc_time) {
+  var url = SNSSDK_PARAM+'&category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
+  Future<Response> response = get(url, headers: HEADS);
+  response.then((response) async {
+    print(response.body);
+    Map map=JSON.decode(response.body);
+    var user=new BaseBean.f
+  }).catchError(() {
+    getPopNavigator(context);
+  });
+}
+
+

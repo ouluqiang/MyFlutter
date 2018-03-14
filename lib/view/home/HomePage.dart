@@ -18,6 +18,8 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
 
+  GlobalKey<ScaffoldState> key=new GlobalKey<ScaffoldState>();
+
   List<BottomNavigationBarItem> items;
   int _index = 0;
   List<Tab> tabs;
@@ -41,8 +43,16 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
       return new TabBarView(
         controller: tabController,
           children: <Widget>[
-            new Text('第一个12231'),
-            new Text('第一个12'),
+            new Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: new Card(
+                child: new Text('新闻'),
+                color: Colors.white,
+                elevation: 4.0,
+              ),
+            ),
+
+            new Text('视频'),
             new Text('第一个312312'),
             new Text('第一个12312313'),
           ],
@@ -58,10 +68,12 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
   void initState() {
     // TODO: implement initState
     super.initState();
+    //'category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
+    getXinwen(context, 'news_hot', '1491981025', '1491981165', '1491981000');
     items = <BottomNavigationBarItem>[
       new BottomNavigationBarItem(
         icon: new Icon(Icons.videogame_asset),
-        title: new Text('阿一'),
+        title: new Text('首页'),
       ),
       new BottomNavigationBarItem(
         icon: new Icon(Icons.zoom_out_map),
@@ -94,6 +106,88 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
     tabController=new TabController(length: tabs.length, vsync: this);
   }
 
+  _hand(){
+    showModalBottomSheet(context: context, builder: (BuildContext context){
+
+      return new Container(
+        child: new Column(
+          children: <Widget>[
+            new Text('拍照'),
+            new Divider(),
+            new Text('从本地获取'),
+            new Divider(),
+            new Container(
+              height: 4.0,
+              color: Colors.white,
+            ),
+            new Divider(),
+            new Text('取消'),
+
+          ],
+        ),
+      );
+    });
+    // showModalBottomSheet<T>：显示模态质感设计底部面板
+//    showModalBottomSheet<Null>(context:context, builder:(BuildContext context) {
+//      return new Container(
+//          child: new Padding(
+//              padding: const EdgeInsets.all(32.0),
+//              child: new Text(
+//                  '这是模态底部面板，点击任意位置即可关闭',
+//                  textAlign: TextAlign.center,
+//                  style: new TextStyle(
+//                      color: Theme.of(context).accentColor,
+//                      fontSize: 24.0
+//                  )
+//              )
+//          )
+//      );
+//    });
+  
+      //底部永久显示的
+//    key.currentState.showBottomSheet((BuildContext context){
+//      final ThemeData themeData = Theme.of(context);
+//      return new Container(
+//          decoration: new BoxDecoration(
+//              border: new Border(top: new BorderSide(color: themeData.disabledColor))
+//          ),
+//          child: new Padding(
+//              padding: const EdgeInsets.all(32.0),
+//              child: new Text(
+//                  '这是一个持久性的底部面板，向下拖动即可将其关闭',
+//                  textAlign: TextAlign.center,
+//                  style: new TextStyle(
+//                      color: themeData.accentColor,
+//                      fontSize: 24.0
+//                  )
+//              )
+//          )
+//      );
+//    });
+
+//    showBottomSheet(context: context , builder: (BuildContext context){
+//      final ThemeData themeData = Theme.of(context);
+//      return new Container(
+//          decoration: new BoxDecoration(
+//              border: new Border(top: new BorderSide(color: themeData.disabledColor))
+//          ),
+//          child: new Padding(
+//              padding: const EdgeInsets.all(32.0),
+//              child: new Text(
+//                  '这是一个持久性的底部面板，向下拖动即可将其关闭',
+//                  textAlign: TextAlign.center,
+//                  style: new TextStyle(
+//                      color: themeData.accentColor,
+//                      fontSize: 24.0
+//                  )
+//              )
+//          )
+//      );
+//    });
+
+  }
+
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -105,10 +199,17 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
   Widget build(BuildContext context) {
     // TODO: implement build
     return new Scaffold(
+      key: key,
       appBar: new AppBar(
         centerTitle: true,
         title: new Text('首页'),
         bottom: _getButton(),
+      ),
+      floatingActionButton: new FloatingActionButton(
+          onPressed: (){
+            _hand();
+          },
+
       ),
       bottomNavigationBar: new BottomNavigationBar(
         items: items,

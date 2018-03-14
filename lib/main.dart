@@ -25,6 +25,8 @@ class RunApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return new MaterialApp(
+//      debugShowCheckedModeBanner: false,//隐藏右上角标记
+//    showPerformanceOverlay: true,//显示性能消耗
       title: 'app',
       theme: new ThemeData(
         primaryColor: Colors.red,
