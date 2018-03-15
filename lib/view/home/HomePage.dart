@@ -1,6 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
 import '../person/Login.dart';
+import 'package:my_flutter/bean/BaseBean.dart';
+import 'package:my_flutter/bean/NewsContext.dart';
+import 'package:http/http.dart';
+import 'package:my_flutter/loader/HttpConfig.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -16,46 +23,82 @@ class MyHomePage extends StatefulWidget {
 
 }
 
-class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
+class MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
 
-  GlobalKey<ScaffoldState> key=new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
 
   List<BottomNavigationBarItem> items;
   int _index = 0;
   List<Tab> tabs;
   TabController tabController;
+  News news;
 
-  Widget _getButton(){
+  Widget _getButton() {
     if (_index == 0) {
       return new TabBar(
         tabs: tabs,
         controller: tabController,
 //          isScrollable: true,
       );
-    }else{
+    } else {
       return null;
     }
+  }
 
+  Widget _getContext() {
+    if(news==null){
+      return new Center(
+        // 可选参数 child:
+        child: new CircularProgressIndicator(),
+      );
+    }else{
+      return new ListView.builder(
+          itemCount: news.data.length,
+          itemBuilder: (context, index) {
+          Data data=news.data[index];
+          Map<String,dynamic> map=JSON.decode(data.content);
+          var contextBean= new ContextBean.fromJson(map);
+//          return new Text('${contextBean.title}');
+          return new Row(
+            children: <Widget>[
+              new Image.asset(
+                'asset/images/phone.png',
+                width: 20.0,
+                height: 20.0,
+              ),
+              new RichText(text:new TextSpan(text:'${contextBean.title}') ,),
+//              new Column(
+//                children: <Widget>[
+//                  new RichText(text:new TextSpan(text:'${contextBean.title}') ,),
+//                  new RichText(text:new TextSpan(text:'${contextBean.abstract}') ,),
+//                ],
+//              ),
+            ],
+          );
+        }
+      );
+    }
   }
 
   Widget _getBody() {
     if (_index == 0) {
       return new TabBarView(
         controller: tabController,
-          children: <Widget>[
-            new Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: new Card(
-                child: new Text('新闻'),
-                color: Colors.white,
-                elevation: 4.0,
-              ),
+        children: <Widget>[
+          new Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: new Card(
+              child: _getContext(),
+              color: Colors.white,
+              elevation: 4.0,
             ),
+          ),
 
-            new Text('视频'),
-            new Text('第一个312312'),
-            new Text('第一个12312313'),
-          ],
+          new Text('视频'),
+          new Text('第一个312312'),
+          new Text('第一个12312313'),
+        ],
       );
     } else if (_index == 1) {
       return new Text('第2个');
@@ -64,12 +107,27 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
     }
   }
 
+  getXin() async{
+//    var url = 'http://is.snssdk.com/api/news/feed/v51/?channel=&aid=&app_name=&version_code=&version_name=&device_platform=&ab_version=&ab_client=&ab_group=&ab_feature=&abflag=3&ssmix=a&device_type=&device_brand=&language=zh&os_api=&os_version=&openudid=1b8d5bf69dc4a561&manifest_version_code=&resolution=&dpi=&update_version_code=&_rticket=&category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
+//    print(url);
+//    Response response =await get(url, headers: HEADS);
+//      Map<String,dynamic> map=JSON.decode(response.body);
+//      var news= new News.fromJson(map);
+    News news=await getXinwen(context, 'news_hot', '1491981025', '1491981165', '1491981000');
+      print('请求：'+news.message);
+    print('${news.data.length}---'+news.toString());
+    setState((){
+        this.news=news;
+      });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     //'category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
-    getXinwen(context, 'news_hot', '1491981025', '1491981165', '1491981000');
+    getXin();
+
     items = <BottomNavigationBarItem>[
       new BottomNavigationBarItem(
         icon: new Icon(Icons.videogame_asset),
@@ -84,9 +142,9 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
         title: new Text('阿三'),
       ),
     ];
-    tabs=<Tab>[
+    tabs = <Tab>[
       new Tab(
-        text: '第一个',
+        text: '推荐',
         icon: new Icon(Icons.title),
       ),
       new Tab(
@@ -103,12 +161,11 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
       ),
 
     ];
-    tabController=new TabController(length: tabs.length, vsync: this);
+    tabController = new TabController(length: tabs.length, vsync: this);
   }
 
-  _hand(){
-    showModalBottomSheet(context: context, builder: (BuildContext context){
-
+  _hand() {
+    showModalBottomSheet(context: context, builder: (BuildContext context) {
       return new Container(
         child: new Column(
           children: <Widget>[
@@ -143,8 +200,8 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
 //          )
 //      );
 //    });
-  
-      //底部永久显示的
+
+    //底部永久显示的
 //    key.currentState.showBottomSheet((BuildContext context){
 //      final ThemeData themeData = Theme.of(context);
 //      return new Container(
@@ -206,9 +263,9 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
         bottom: _getButton(),
       ),
       floatingActionButton: new FloatingActionButton(
-          onPressed: (){
-            _hand();
-          },
+        onPressed: () {
+          _hand();
+        },
 
       ),
       bottomNavigationBar: new BottomNavigationBar(
@@ -230,7 +287,7 @@ class MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMi
                   new Padding(
                     padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 20.0),
                     child: new GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         getPushNavigator(context, new MyLogin());
                       },
                       child: new Image.asset('asset/images/head.png',

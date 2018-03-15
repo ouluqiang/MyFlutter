@@ -59,7 +59,7 @@ getLoad(BuildContext context) {
 }
 
 
-getLogin(BuildContext context, String phone, String password) {
+getLogin(BuildContext context, String phone, String password) async {
   getLoad(context);
   var url = LOGIN + '?username=' + phone + '&password=' + password;
   Future<Response> response = get(url, headers: HEADS);
@@ -72,16 +72,18 @@ getLogin(BuildContext context, String phone, String password) {
     getPopNavigator(context);
   });
 }
-getXinwen(BuildContext context, String category, String min_behot_time,String last_refresh_sub_entrance_interval,String loc_time) {
+
+
+Future<News> getXinwen(BuildContext context, String category, String min_behot_time,String last_refresh_sub_entrance_interval,
+    String loc_time) async {
   var url = SNSSDK_PARAM+'&category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
-  Future<Response> response = get(url, headers: HEADS);
-  response.then((response) async {
+  print(url);
+  Response response = await get(url, headers: HEADS);
+
     print(response.body);
-    Map map=JSON.decode(response.body);
-    var user=new BaseBean.f
-  }).catchError(() {
-    getPopNavigator(context);
-  });
+    Map<String,dynamic> map=JSON.decode(response.body);
+    var news= new News.fromJson(map);
+    return news;
 }
 
 
