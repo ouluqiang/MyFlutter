@@ -4,10 +4,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
 import '../person/Login.dart';
-import 'package:my_flutter/bean/BaseBean.dart';
+import 'package:my_flutter/bean/NewsBean.dart';
 import 'package:my_flutter/bean/NewsContext.dart';
 import 'package:http/http.dart';
 import 'package:my_flutter/loader/HttpConfig.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_flutter/config/CodeConfig.dart';
+
 
 class MyHomePage extends StatefulWidget {
 
@@ -47,36 +50,53 @@ class MyHomePageState extends State<MyHomePage>
   }
 
   Widget _getContext() {
-    if(news==null){
+    if (news == null) {
       return new Center(
         // 可选参数 child:
         child: new CircularProgressIndicator(),
       );
-    }else{
+    } else {
       return new ListView.builder(
           itemCount: news.data.length,
           itemBuilder: (context, index) {
-          Data data=news.data[index];
-          Map<String,dynamic> map=JSON.decode(data.content);
-          var contextBean= new ContextBean.fromJson(map);
-//          return new Text('${contextBean.title}');
-          return new Row(
-            children: <Widget>[
-              new Image.asset(
-                'asset/images/phone.png',
-                width: 20.0,
-                height: 20.0,
+            Data data = news.data[index];
+            Map<String, dynamic> map = JSON.decode(data.content);
+            var contextBean = new ContextBean.fromJson(map);
+//            print('${contextBean.middle_image.url}');
+            return new Container(
+              padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
+              child: new Column(
+
+                children: <Widget>[
+                  new Row(
+                    children: <Widget>[
+                      getImage(contextBean),
+                      new Expanded(
+                          child: new Text('${contextBean.title}')
+                      )
+                    ],
+                  ),
+                  new Divider(),
+                ],
               ),
-              new RichText(text:new TextSpan(text:'${contextBean.title}') ,),
-//              new Column(
-//                children: <Widget>[
-//                  new RichText(text:new TextSpan(text:'${contextBean.title}') ,),
-//                  new RichText(text:new TextSpan(text:'${contextBean.abstract}') ,),
-//                ],
-//              ),
-            ],
-          );
-        }
+            );
+          }
+      );
+    }
+  }
+
+  Widget getImage(ContextBean contextBean) {
+    if (contextBean.middle_image!=null&&contextBean.middle_image.url != null) {
+      return new Image.network(
+        '${contextBean.middle_image.url}',
+        width: 20.0,
+        height: 20.0,
+      );
+    } else {
+      return new Image.asset(
+        'asset/images/phone.png',
+        width: 20.0,
+        height: 20.0,
       );
     }
   }
@@ -107,19 +127,31 @@ class MyHomePageState extends State<MyHomePage>
     }
   }
 
-  getXin() async{
+  getXin() async {
 //    var url = 'http://is.snssdk.com/api/news/feed/v51/?channel=&aid=&app_name=&version_code=&version_name=&device_platform=&ab_version=&ab_client=&ab_group=&ab_feature=&abflag=3&ssmix=a&device_type=&device_brand=&language=zh&os_api=&os_version=&openudid=1b8d5bf69dc4a561&manifest_version_code=&resolution=&dpi=&update_version_code=&_rticket=&category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
 //    print(url);
 //    Response response =await get(url, headers: HEADS);
 //      Map<String,dynamic> map=JSON.decode(response.body);
 //      var news= new News.fromJson(map);
-    News news=await getXinwen(context, 'news_hot', '1491981025', '1491981165', '1491981000');
-      print('请求：'+news.message);
-    print('${news.data.length}---'+news.toString());
-    setState((){
-        this.news=news;
-      });
+    News news = await getXinwen(
+        context, 'news_hot', '1491981025', '1491981165', '1491981000');
+    print('请求：' + news.message);
+//    print('${news.data}---}');
+    setState(() {
+      this.news = news;
+    });
   }
+
+  Future<SharedPreferences> preferences=SharedPreferences.getInstance();
+  String username='';
+  _sharedPreferences() async {
+    SharedPreferences sp=await preferences;
+    setState((){
+      username=sp.getString(USERNAME)?? '用户名';
+    });
+  }
+
+
 
   @override
   void initState() {
@@ -127,7 +159,7 @@ class MyHomePageState extends State<MyHomePage>
     super.initState();
     //'category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
     getXin();
-
+    _sharedPreferences();
     items = <BottomNavigationBarItem>[
       new BottomNavigationBarItem(
         icon: new Icon(Icons.videogame_asset),
@@ -244,6 +276,60 @@ class MyHomePageState extends State<MyHomePage>
 
   }
 
+ Widget _drawer() {
+
+   return new Drawer(
+      elevation: 30.0,
+      child: new ListView(
+        children: <Widget>[
+          new Container(
+            child: new Row(
+              children: <Widget>[
+                new Padding(
+                  padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 20.0),
+                  child: new GestureDetector(
+                    onTap: () {
+                      getPushNavigator(context, new MyLogin());
+                    },
+                    child: new Image.asset('asset/images/head.png',
+                      width: 80.0,
+                      height: 80.0,
+                    ),
+                  ),
+                ),
+                new Text('${username}',
+                  style: new TextStyle(
+                    fontSize: 20.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          new Divider(),
+          new ListTile(
+            leading: new Icon(Icons.list),
+            title: new Text('第一个'),
+          ),
+          new Divider(),
+          new ListTile(
+            leading: new Icon(Icons.list),
+            title: new Text('第2个'),
+          ),
+          new Divider(),
+          new ListTile(
+            leading: new Icon(Icons.list),
+            title: new Text('第3个'),
+          ),
+          new Divider(),
+          new ListTile(
+            leading: new Icon(Icons.list),
+            title: new Text('第4个'),
+          ),
+          new Divider(),
+        ],
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -277,57 +363,7 @@ class MyHomePageState extends State<MyHomePage>
           });
         },
       ),
-      drawer: new Drawer(
-        elevation: 30.0,
-        child: new ListView(
-          children: <Widget>[
-            new Container(
-              child: new Row(
-                children: <Widget>[
-                  new Padding(
-                    padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 20.0),
-                    child: new GestureDetector(
-                      onTap: () {
-                        getPushNavigator(context, new MyLogin());
-                      },
-                      child: new Image.asset('asset/images/head.png',
-                        width: 80.0,
-                        height: 80.0,
-                      ),
-                    ),
-                  ),
-                  new Text('用户名',
-                    style: new TextStyle(
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            new Divider(),
-            new ListTile(
-              leading: new Icon(Icons.list),
-              title: new Text('第一个'),
-            ),
-            new Divider(),
-            new ListTile(
-              leading: new Icon(Icons.list),
-              title: new Text('第2个'),
-            ),
-            new Divider(),
-            new ListTile(
-              leading: new Icon(Icons.list),
-              title: new Text('第3个'),
-            ),
-            new Divider(),
-            new ListTile(
-              leading: new Icon(Icons.list),
-              title: new Text('第4个'),
-            ),
-            new Divider(),
-          ],
-        ),
-      ),
+      drawer: _drawer(),
 
       body: _getBody(),
     );

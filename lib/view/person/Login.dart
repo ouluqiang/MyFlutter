@@ -10,6 +10,7 @@ import 'ForgetPassword.dart';
 import 'dart:math';
 import 'package:my_flutter/config/CodeConfig.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
+import 'package:my_flutter/bean/BaseBean.dart';
 
 class MyLogin extends StatefulWidget {
   @override
@@ -40,77 +41,21 @@ class MyLoginState extends State<MyLogin> {
   _handLogin() async {
     if (_phone.isEmpty) {
       handToast(USERNAME_NULL_NOT);
-
       return;
     }
     if (_password.isEmpty) {
       handToast(PASSWORD_NULL_NOT);
       return;
     }
-    getLogin(context, _phone, _password);
-//    var body = JSON.encode({'username': 'a1', 'password': '123456'});
-//    print(body.toString());
-//    var url = LOGIN + '?username=' + _phone + '&password=' + _password;
-//    Future<Response> response = get(url, headers: HEADS);
-//    response.then((response) async {
-//      print(response.body);
-//      Navigator.pop(context);
-//      Navigator.pushReplacement(
-//          context,
-//          new MaterialPageRoute(
-//              builder: (BuildContext context) {
-//                return new MyHomePage();
-//              }
-//          )
-//      );
-//    }).catchError(() {
-//      Navigator.of(context).pop();
-//      methodChannel.invokeMethod('toast','密码错误');
-//    });
-//    Response response=await createHttpClient().get(
-//        LOGIN+'?username='+_phone+'&password='+_password,
-//        headers:httpHeads,
-//    );
-//    Response response=await createHttpClient().post(
-//        USERS,
-//        headers:httpHeads,
-//      body: body
-//    );
-//    print(response.body.toString());
-
-//    showDialog<Null>(
-//        context: context,
-//        child: new AlertDialog(
-//          title: new Text('标的'),
-//          content: new Text('${_phone}---${_password}'),
-//          actions: <Widget>[
-//            new FlatButton(
-//                onPressed: () {
-//                  Navigator.pop(context);
-//                },
-//                child: new Text('确定')
-//            ),
-//            new FlatButton(onPressed: (){
-//              Navigator.pop(context);
-//            }, child: new Text('取消'))
-//          ],
-//        )
-//    );
+    if (_password.length<6) {
+      handToast(PASSWORD_LENGTH_NOT);
+      return;
+    }
+    int code=await getLogin(context, _phone, _password);
 
 
   }
 
-//  _handNavigator(bool isRegister){
-//    Navigator.push(context,
-//      new MaterialPageRoute(builder: (BuildContext context){
-//        if(isRegister){
-//          return new MyRegister();
-//        }else{
-//          return new MyForgetPassword();
-//        }
-//      })
-//    );
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,8 +98,8 @@ class MyLoginState extends State<MyLogin> {
 
                       decoration: new InputDecoration(
 //                            border: InputBorder.none,  //隐藏下滑线
-                        hintText: '请输入手机号',
-                        labelText: '手机号',
+                        hintText: '请输入账号',
+                        labelText: '账号',
 
                       ),
                       maxLength: 11,
@@ -225,21 +170,21 @@ class MyLoginState extends State<MyLogin> {
                   },
                 ),
               ),
-              new Flexible(
-                child: new Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 14.0, 20.0, 14.0),
-                    child: new Align(
-                      alignment: Alignment.centerRight,
-                      child: new GestureDetector(
-                        child: new Text('忘记密码?'),
-                        onTap: () {
-                          print('忘记密码');
-                          getPushNavigator(context, new MyForgetPassword());
-                        },
-                      ),
-                    )
-                ),
-              ),
+//              new Flexible(
+//                child: new Padding(
+//                    padding: const EdgeInsets.fromLTRB(0.0, 14.0, 20.0, 14.0),
+//                    child: new Align(
+//                      alignment: Alignment.centerRight,
+//                      child: new GestureDetector(
+//                        child: new Text('忘记密码?'),
+//                        onTap: () {
+//                          print('忘记密码');
+//                          getPushNavigator(context, new MyForgetPassword());
+//                        },
+//                      ),
+//                    )
+//                ),
+//              ),
 
 
             ],

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'loader/FileLoader.dart';
-import 'widget/NavigationIconView.dart';
-import 'widget/MyListView.dart';
-import 'widget/MyListItem.dart';
+import 'package:my_flutter/widget/my/NavigationIconView.dart';
+import 'package:my_flutter/widget/my/MyListView.dart';
+import 'package:my_flutter/widget/my/MyListItem.dart';
 import 'loader/HttpLoader.dart';
-import 'widget/MyProgressBar.dart';
+import 'package:my_flutter/widget/my/MyProgressBar.dart';
 
 
 

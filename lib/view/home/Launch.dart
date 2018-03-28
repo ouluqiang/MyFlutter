@@ -3,7 +3,8 @@ import '../person/Login.dart';
 import 'dart:async';
 import 'package:my_flutter/loader/HttpLoader.dart';
 import 'HomePage.dart';
-
+import 'package:my_flutter/loader/HttpLoader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyLaunch extends StatefulWidget {
   @override
@@ -20,11 +21,21 @@ class MyLaunchState extends State<MyLaunch> {
   int se = 4;
   Timer timer;
 
+  _getToken() async{
+    SharedPreferences sp= await SharedPreferences.getInstance();
+    String msg=await getCheckSession(context);
+    if(msg.isNotEmpty){
+      if(msg=='fail'){
+        sp.clear();
+      }
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _getToken();
     timer = new Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       print('${timer.tick}----${se}');
       if (se == 1) {

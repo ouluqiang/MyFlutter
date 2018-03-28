@@ -5,6 +5,10 @@ import 'package:http/http.dart';
 import 'HttpConfig.dart';
 import 'package:my_flutter/view/home/HomePage.dart';
 import 'package:my_flutter/bean/BaseBean.dart';
+import 'package:my_flutter/bean/NewsBean.dart';
+import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/bean/UserBean.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /**
  * 跳转界面
@@ -59,18 +63,91 @@ getLoad(BuildContext context) {
 }
 
 
-getLogin(BuildContext context, String phone, String password) async {
+Future<int> getLogin(BuildContext context, String phone, String password) async {
   getLoad(context);
   var url = LOGIN + '?username=' + phone + '&password=' + password;
-  Future<Response> response = get(url, headers: HEADS);
-  response.then((response) async {
-    print(response.body);
+  Response response = await get(url, headers: HEADS);
+  Map<String,dynamic> s=JSON.decode(response.body);
+  var baseBean=new BaseBean.fromJson(s);
+  print(response.body);
+  if(baseBean.code!=null&&baseBean.error!=null){
     getPopNavigator(context);
-    getPushReplacementNavigator(context, new MyHomePage());
+    handToast(baseBean.error);
+  }else{
+    Map<String,dynamic> s=JSON.decode(response.body);
+    var userBean=new UserBean.fromJson(s);
+    SharedPreferences sp=await SharedPreferences.getInstance();
+    sp.setString(SESSION_TOKEN, userBean.sessionToken);
+    sp.setString(USERNAME, userBean.username);
+    sp.setString(OBJECT_ID, userBean.objectId);
+    getPopNavigator(context);
+    getPopNavigator(context);
+//    getPushReplacementNavigator(context, new MyHomePage());
+  }
+  return baseBean.code;
+}
 
-  }).catchError(() {
+
+Future<String> getCheckSession(BuildContext context) async {
+  SharedPreferences sp=await SharedPreferences.getInstance();
+  String objectId=sp.getString(OBJECT_ID);
+  String token=sp.getString(SESSION_TOKEN);
+//  print(objectId);
+  if(objectId.isNotEmpty) {
+    var url = CHECK_SESSION + objectId;
+    HEADS.addAll({TOKEN_KEY:token});
+    Response response = await get(url, headers: HEADS);
+    Map<String, dynamic> map = JSON.decode(response.body);
+      print(response.body);
+    String msg=map['msg'];
+    return msg;
+  }
+  return '';
+}
+
+Future<int> getRegister(BuildContext context, String phone, String password) async {
+  getLoad(context);
+  var url = USERS;
+  Map map={'username':phone,'password':password};
+  var body=JSON.encode(map);
+  Response response = await post(url, body: body,headers: HEADS);
+  Map<String,dynamic> s=JSON.decode(response.body);
+    var baseBean=new BaseBean.fromJson(s);
+    print(baseBean.code);
+  if(baseBean.code!=null&&baseBean.error!=null){
     getPopNavigator(context);
-  });
+    handToast(baseBean.error);
+  }else{
+    getPopNavigator(context);
+    getPopNavigator(context);
+  }
+  return baseBean.code;
+//    if(baseBean.code!=null&&baseBean.error!=null){
+//      getPopNavigator(context);
+//      handToast(baseBean.error);
+//
+//    }else{
+//      getPopNavigator(context);
+//      getPopNavigator(context);
+//    }
+//  response.then((response) async {
+//    print(response.body);
+//    Map<String,dynamic> map=JSON.decode(response.body);
+//    BaseBean baseBean=new BaseBean.fromJson(map);
+//    if(baseBean.code!=null&&baseBean.error!=null){
+//      getPopNavigator(context);
+//      handToast(baseBean.error);
+//
+//    }else{
+//      getPopNavigator(context);
+//      getPopNavigator(context);
+//    }
+//
+//
+//  }).catchError(() {
+//    handToast(ERROR);
+////    getPopNavigator(context);
+//  });
 }
 
 
@@ -80,7 +157,7 @@ Future<News> getXinwen(BuildContext context, String category, String min_behot_t
   print(url);
   Response response = await get(url, headers: HEADS);
 
-    print(response.body);
+//    print(response.body);
     Map<String,dynamic> map=JSON.decode(response.body);
     var news= new News.fromJson(map);
     return news;

@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:my_flutter/loader/HttpConfig.dart';
 import 'dart:convert';
 import '../home/HomePage.dart';
+import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/loader/HttpLoader.dart';
+import 'package:my_flutter/bean/BaseBean.dart';
 
 class MyRegister extends StatefulWidget {
   @override
@@ -18,79 +21,44 @@ class MyRegister extends StatefulWidget {
 
 class MyRegisterState extends State<MyRegister> {
 
+  TextEditingController controller=new TextEditingController();
+//  TextEditingController controller2=new TextEditingController();
+//  TextEditingController controller3=new TextEditingController();
+
   String _phone;
   String _password;
+  String _passwordNew;
 
-  _handLogin() async {
+  _handRegister() async {
     if (_phone.isEmpty) {
+      handToast(USERNAME_NULL_NOT);
       return;
     }
     if (_password.isEmpty) {
+      handToast(PASSWORD_NULL_NOT);
       return;
     }
-    showDialog(
-        context: context,
-        child: new AlertDialog(
-          title: new Container(
-            padding: const EdgeInsets.fromLTRB(100.0, 0.0, 100.0, 0.0),
-            child: new CircularProgressIndicator(),
-          ),
-          content: new Container(
-            alignment: Alignment.center,
-            child: new Text('正在加载'),
-            height: 26.0,
-          ) ,
+    if (_password.length<6) {
+      handToast(PASSWORD_LENGTH_NOT);
+      return;
+    }
+    if (_passwordNew.isEmpty) {
+      handToast(PASSWORD_NULL_NOT);
+      return;
+    }
+    if (_passwordNew.length<6) {
+      handToast(PASSWORD_LENGTH_NOT);
+      return;
+    }
+    if (_password!=_passwordNew) {
+      handToast(PASSWORD_EQUALS_NOT);
+      return;
+    }
 
-        )
-    );
-//    var body = JSON.encode({'username': 'a1', 'password': '123456'});
-//    print(body.toString());
-    var url = LOGIN + '?username=' + _phone + '&password=' + _password;
-    Future<Response> response = get(url, headers: HEADS);
-    response.then((response) {
-      print(response.body);
-      Navigator.pop(context);
-      Navigator.pushReplacement(
-          context,
-          new MaterialPageRoute(
-              builder: (BuildContext context){
-                return new MyHomePage();
-              }
-        )
-      );
-    }).catchError(() {
-      Navigator.of(context).pop();
-    });
-//    Response response=await createHttpClient().get(
-//        LOGIN+'?username='+_phone+'&password='+_password,
-//        headers:httpHeads,
-//    );
-//    Response response=await createHttpClient().post(
-//        USERS,
-//        headers:httpHeads,
-//      body: body
-//    );
-//    print(response.body.toString());
-
-//    showDialog<Null>(
-//        context: context,
-//        child: new AlertDialog(
-//          title: new Text('标的'),
-//          content: new Text('${_phone}---${_password}'),
-//          actions: <Widget>[
-//            new FlatButton(
-//                onPressed: () {
-//                  Navigator.pop(context);
-//                },
-//                child: new Text('确定')
-//            ),
-//            new FlatButton(onPressed: (){
-//              Navigator.pop(context);
-//            }, child: new Text('取消'))
-//          ],
-//        )
-//    );
-
+    int code=await getRegister(context, _phone, _password);
+    if(code!=null){
+      controller.clear();
+    }
 
   }
 
@@ -129,15 +97,15 @@ class MyRegisterState extends State<MyRegister> {
                   child: new Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
                     child: new TextField( //输入框控件
-
+                      controller: controller,
                       onChanged: (str) {
                         _phone = str;
                       },
 
                       decoration: new InputDecoration(
 //                            border: InputBorder.none,  //隐藏下滑线
-                        hintText: '请输入手机号',
-                        labelText: '手机号',
+                        hintText: '请输入账号',
+                        labelText: '账号',
 
                       ),
                       maxLength: 11,
@@ -170,6 +138,7 @@ class MyRegisterState extends State<MyRegister> {
                     child: new Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
                       child: new TextField(
+//                        controller: controller2,
                         onChanged: (str) {
                           _password = str;
                         },
@@ -192,11 +161,51 @@ class MyRegisterState extends State<MyRegister> {
               ],
             ),
           ),
+          new Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+            child: new Row(
+
+              children: <Widget>[
+                new Image.asset(
+                  'asset/images/password.png',
+                  width: 22.0,
+                  height: 26.0,
+                  fit: BoxFit.fill,
+//                    alignment: Alignment.bottomCenter,
+                ),
+                new Flexible(
+
+                    child: new Padding(
+                      padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
+                      child: new TextField(
+//                        controller: controller3,
+                        onChanged: (str) {
+                          _passwordNew = str;
+                        },
+                        obscureText: true,
+                        //输入密码显示·
+                        maxLines: 1,
+                        maxLength: 16,
+                        decoration: new InputDecoration(
+                          hintText: '请再次输入密码',
+                          labelText: '重复密码',
+                        ),
+
+                        style: textStyle,
+
+                      ),
+                    )
+
+                ),
+
+              ],
+            ),
+          ),
           new Container(
             margin: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 40.0),
             child: new RaisedButton(
               padding: const EdgeInsets.fromLTRB(0.0, 14.0, 0.0, 14.0),
-              onPressed: _handLogin,
+              onPressed: _handRegister,
               shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(10.0),
               ),

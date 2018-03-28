@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'MyListItem.dart';
+import 'package:my_flutter/widget/my/MyListItem.dart';
 
 class MyListView extends StatefulWidget{
 

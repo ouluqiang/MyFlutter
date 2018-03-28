@@ -8,6 +8,8 @@ final API_VALUE='c1f62f2ea289dccb57bf36633cd6547a';
 final TYPE_KEY='Content-Type';
 final TYPE_VALUE='application/json';
 
+final TOKEN_KEY='X-Bmob-Session-Token';
+
 final Map HEADS={APPID_KEY:APPID_VALUE,API_KEY:API_VALUE,TYPE_KEY:TYPE_VALUE};
 
 
@@ -15,8 +17,9 @@ final URL='https://api.bmob.cn/';
 final URL_CODE=URL+'1/';
 
 
-final LOGIN=URL_CODE+'login';
-final USERS=URL_CODE+'users';
+final LOGIN=URL_CODE+'login';//登录
+final USERS=URL_CODE+'users';//注册
+final CHECK_SESSION=URL_CODE+'checkSession/';//判断token是否过期
 
 
 /**
