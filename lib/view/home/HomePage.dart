@@ -10,6 +10,7 @@ import 'package:http/http.dart';
 import 'package:my_flutter/loader/HttpConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/view/person/UserDetails.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -146,8 +147,9 @@ class MyHomePageState extends State<MyHomePage>
   String username='';
   _sharedPreferences() async {
     SharedPreferences sp=await preferences;
+    String name=sp.getString(USERNAME);
     setState((){
-      username=sp.getString(USERNAME)?? '用户名';
+      username=name?? '用户名';
     });
   }
 
@@ -288,8 +290,14 @@ class MyHomePageState extends State<MyHomePage>
                 new Padding(
                   padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 20.0),
                   child: new GestureDetector(
-                    onTap: () {
-                      getPushNavigator(context, new MyLogin());
+                    onTap: ()async {
+                      SharedPreferences sp=await preferences;
+                      String token=sp.getString(SESSION_TOKEN);
+                      if(token!=null){
+                        getPushNavigator(context, new MyUserDetails());
+                      }else {
+                        getPushNavigator(context, new MyLogin());
+                      }
                     },
                     child: new Image.asset('asset/images/head.png',
                       width: 80.0,
@@ -341,6 +349,7 @@ class MyHomePageState extends State<MyHomePage>
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return new Scaffold(
       key: key,
       appBar: new AppBar(

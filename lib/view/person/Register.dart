@@ -62,6 +62,13 @@ class MyRegisterState extends State<MyRegister> {
 
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controller.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

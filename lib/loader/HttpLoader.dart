@@ -93,7 +93,7 @@ Future<String> getCheckSession(BuildContext context) async {
   String objectId=sp.getString(OBJECT_ID);
   String token=sp.getString(SESSION_TOKEN);
 //  print(objectId);
-  if(objectId.isNotEmpty) {
+  if(objectId!=null) {
     var url = CHECK_SESSION + objectId;
     HEADS.addAll({TOKEN_KEY:token});
     Response response = await get(url, headers: HEADS);
