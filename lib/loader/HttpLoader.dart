@@ -20,6 +20,13 @@ getPushNavigator(BuildContext context,Widget widget) {
       })
   );
 }
+Future<String> getPushNavigator2(BuildContext context,Widget widget) {
+ return Navigator.push(context,
+      new MaterialPageRoute<String>(builder: (BuildContext context) {
+          return widget;
+      })
+  );
+}
 
 /**
  * 跳转界面，销毁当前界面
@@ -38,6 +45,10 @@ getPushReplacementNavigator(BuildContext context,Widget widget) {
 /**
  * 销毁当前界面跟dialog，popupwindow
  */
+getPopNavigator2(BuildContext context,String s){
+  Navigator.pop(context,s);
+}
+
 getPopNavigator(BuildContext context){
   Navigator.pop(context);
 }
@@ -81,7 +92,7 @@ Future<int> getLogin(BuildContext context, String phone, String password) async 
     sp.setString(USERNAME, userBean.username);
     sp.setString(OBJECT_ID, userBean.objectId);
     getPopNavigator(context);
-    getPopNavigator(context);
+    getPopNavigator2(context,userBean.username);
 //    getPushReplacementNavigator(context, new MyHomePage());
   }
   return baseBean.code;

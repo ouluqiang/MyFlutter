@@ -29,7 +29,6 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
 
   List<BottomNavigationBarItem> items;
@@ -149,7 +148,7 @@ class MyHomePageState extends State<MyHomePage>
     SharedPreferences sp=await preferences;
     String name=sp.getString(USERNAME);
     setState((){
-      username=name?? '用户名';
+      this.username=name?? '用户名';
     });
   }
 
@@ -293,11 +292,15 @@ class MyHomePageState extends State<MyHomePage>
                     onTap: ()async {
                       SharedPreferences sp=await preferences;
                       String token=sp.getString(SESSION_TOKEN);
+                      String s=null;
                       if(token!=null){
-                        getPushNavigator(context, new MyUserDetails());
+                         s=await getPushNavigator2(context, new MyUserDetails());
                       }else {
-                        getPushNavigator(context, new MyLogin());
+                         s=await getPushNavigator2(context, new MyLogin());
                       }
+                      setState((){
+                        this.username=s??'用户名';
+                      });
                     },
                     child: new Image.asset('asset/images/head.png',
                       width: 80.0,
@@ -375,6 +378,7 @@ class MyHomePageState extends State<MyHomePage>
       drawer: _drawer(),
 
       body: _getBody(),
+
     );
   }
 

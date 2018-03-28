@@ -32,7 +32,7 @@ class MyUserDetailsState extends State<MyUserDetails> {
               SharedPreferences sp=await SharedPreferences.getInstance();
               bool isClear=await sp.clear();
               if(isClear){
-//                getPopNavigator(context);
+                getPopNavigator2(context,null);
               }
             },
             child: new Text(
