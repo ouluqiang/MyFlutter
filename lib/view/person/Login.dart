@@ -10,7 +10,7 @@ import 'ForgetPassword.dart';
 import 'dart:math';
 import 'package:my_flutter/config/CodeConfig.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
-import 'package:my_flutter/bean/BaseBean.dart';
+import 'package:my_flutter/bean/user/BaseBean.dart';
 
 class MyLogin extends StatefulWidget {
   @override

@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'HttpConfig.dart';
 import 'package:my_flutter/view/home/HomePage.dart';
-import 'package:my_flutter/bean/BaseBean.dart';
-import 'package:my_flutter/bean/NewsBean.dart';
+import 'package:my_flutter/bean/user/BaseBean.dart';
+import 'package:my_flutter/bean/xinwen/NewsBean.dart';
 import 'package:my_flutter/config/CodeConfig.dart';
-import 'package:my_flutter/bean/UserBean.dart';
+import 'package:my_flutter/bean/user/UserBean.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_flutter/bean/connotation/ConnotationBean.dart';
+import 'package:my_flutter/bean/connotation/ConnotationContentBean.dart'  show ConnotationContentBean;
 
 /**
  * 跳转界面
@@ -76,8 +78,8 @@ getLoad(BuildContext context) {
 
 Future<int> getLogin(BuildContext context, String phone, String password) async {
   getLoad(context);
-  var url = LOGIN + '?username=' + phone + '&password=' + password;
-  Response response = await get(url, headers: HEADS);
+  var url = HttpBase.LOGIN + '?username=' + phone + '&password=' + password;
+  Response response = await get(url, headers: HttpBase.HEADS);
   Map<String,dynamic> s=JSON.decode(response.body);
   var baseBean=new BaseBean.fromJson(s);
   print(response.body);
@@ -105,9 +107,9 @@ Future<String> getCheckSession(BuildContext context) async {
   String token=sp.getString(SESSION_TOKEN);
 //  print(objectId);
   if(objectId!=null) {
-    var url = CHECK_SESSION + objectId;
-    HEADS.addAll({TOKEN_KEY:token});
-    Response response = await get(url, headers: HEADS);
+    var url = HttpBase.CHECK_SESSION + objectId;
+    HttpBase.HEADS.addAll({HttpBase.TOKEN_KEY:token});
+    Response response = await get(url, headers: HttpBase.HEADS);
     Map<String, dynamic> map = JSON.decode(response.body);
       print(response.body);
     String msg=map['msg'];
@@ -118,10 +120,10 @@ Future<String> getCheckSession(BuildContext context) async {
 
 Future<int> getRegister(BuildContext context, String phone, String password) async {
   getLoad(context);
-  var url = USERS;
+  var url = HttpBase.USERS;
   Map map={'username':phone,'password':password};
   var body=JSON.encode(map);
-  Response response = await post(url, body: body,headers: HEADS);
+  Response response = await post(url, body: body,headers: HttpBase.HEADS);
   Map<String,dynamic> s=JSON.decode(response.body);
     var baseBean=new BaseBean.fromJson(s);
     print(baseBean.code);
@@ -133,45 +135,38 @@ Future<int> getRegister(BuildContext context, String phone, String password) asy
     getPopNavigator(context);
   }
   return baseBean.code;
-//    if(baseBean.code!=null&&baseBean.error!=null){
-//      getPopNavigator(context);
-//      handToast(baseBean.error);
+}
+
+Future<ConnotationBean> getConnotationTab() async {
+  String url=HttpConnotation.URL_CONNOTATION;
+  Response response = await get(url);
+  print(response.body);
+  Map<String,dynamic> map=JSON.decode(response.body);
+  var connotation= new ConnotationBean.fromJson(map);
+  return connotation;
+}
+Future<ConnotationContentBean> getConnotationTabContent(String url) async {
+//  Response response = await get(url);
+  String url=HttpConnotation.URL_VIDEO;
+  Response response = await get(url);
+  print(response.body);
+  Map<String,dynamic> map=JSON.decode(response.body);
+  var connotation= new ConnotationContentBean.fromJson(map);
+//  return connotation;
+return connotation;
+}
+
+
+//Future<News> getXinwen(BuildContext context, String category, String min_behot_time,String last_refresh_sub_entrance_interval,
+//    String loc_time) async {
+//  var url = SNSSDK_PARAM+'&category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
+//  print(url);
+//  Response response = await get(url);
 //
-//    }else{
-//      getPopNavigator(context);
-//      getPopNavigator(context);
-//    }
-//  response.then((response) async {
-//    print(response.body);
+////    print(response.body);
 //    Map<String,dynamic> map=JSON.decode(response.body);
-//    BaseBean baseBean=new BaseBean.fromJson(map);
-//    if(baseBean.code!=null&&baseBean.error!=null){
-//      getPopNavigator(context);
-//      handToast(baseBean.error);
-//
-//    }else{
-//      getPopNavigator(context);
-//      getPopNavigator(context);
-//    }
-//
-//
-//  }).catchError(() {
-//    handToast(ERROR);
-////    getPopNavigator(context);
-//  });
-}
-
-
-Future<News> getXinwen(BuildContext context, String category, String min_behot_time,String last_refresh_sub_entrance_interval,
-    String loc_time) async {
-  var url = SNSSDK_PARAM+'&category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
-  print(url);
-  Response response = await get(url, headers: HEADS);
-
-//    print(response.body);
-    Map<String,dynamic> map=JSON.decode(response.body);
-    var news= new News.fromJson(map);
-    return news;
-}
+//    var news= new News.fromJson(map);
+//    return news;
+//}
 
 

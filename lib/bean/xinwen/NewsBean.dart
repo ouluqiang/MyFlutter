@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 
-part 'NewsBean.g.dart';
+part 'package:my_flutter/bean/xinwen/NewsBean.g.dart';
 
 /**
  * flutter packages pub run build_runner build

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'NewsContext.g.dart';
+part 'package:my_flutter/bean/xinwen/NewsContext.g.dart';
 
 
 /**

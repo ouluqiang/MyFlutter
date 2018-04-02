@@ -7,7 +7,7 @@ import 'dart:convert';
 import '../home/HomePage.dart';
 import 'package:my_flutter/config/CodeConfig.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
-import 'package:my_flutter/bean/BaseBean.dart';
+import 'package:my_flutter/bean/user/BaseBean.dart';
 
 class MyRegister extends StatefulWidget {
   @override

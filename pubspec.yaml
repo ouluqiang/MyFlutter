@@ -17,6 +17,8 @@ dependencies:
   json_annotation: ^0.2.2
   #数据存储
   shared_preferences: ^0.4.0
+  #视频插件
+  video_player: "^0.3.0"
 
 dev_dependencies:
   flutter_test:

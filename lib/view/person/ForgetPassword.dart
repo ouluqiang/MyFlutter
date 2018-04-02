@@ -45,8 +45,8 @@ class MyForgetPasswordState extends State<MyForgetPassword> {
     );
 //    var body = JSON.encode({'username': 'a1', 'password': '123456'});
 //    print(body.toString());
-    var url = LOGIN + '?username=' + _phone + '&password=' + _password;
-    Future<Response> response = get(url, headers: HEADS);
+    var url = HttpBase.LOGIN + '?username=' + _phone + '&password=' + _password;
+    Future<Response> response = get(url, headers: HttpBase.HEADS);
     response.then((response) {
       print(response.body);
       Navigator.pop(context);

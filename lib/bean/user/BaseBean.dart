@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
 
-part 'BaseBean.g.dart';
+part 'package:my_flutter/bean/user/BaseBean.g.dart';
 
 /**
- * flutter packages pub run build_runner build
+ *          flutter packages pub run build_runner build
  */
 
 @JsonSerializable()

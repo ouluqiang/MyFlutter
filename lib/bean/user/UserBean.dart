@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 
-part 'UserBean.g.dart';
+part 'package:my_flutter/bean/user/UserBean.g.dart';
 
 @JsonSerializable()
 class UserBean extends Object with _$UserBeanSerializerMixin{
