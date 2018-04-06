@@ -40,7 +40,7 @@ class MyLaunchState extends State<MyLaunch> {
       print('${timer.tick}----${se}');
       if (se == 1) {
         timer.cancel();
-        getPushReplacementNavigator(context, new MyHomePage());
+        _handNavigator();
       } else {
         setState(() {
           this.se--;
@@ -49,6 +49,9 @@ class MyLaunchState extends State<MyLaunch> {
     });
   }
 
+  void _handNavigator(){
+    getPushReplacementNavigator(context, new MyHomePage());
+  }
 
 //  _handNavigator(){
 //    Navigator.pushReplacement(
@@ -75,8 +78,7 @@ class MyLaunchState extends State<MyLaunch> {
           alignment: Alignment.topRight,
           margin: const EdgeInsets.fromLTRB(0.0, 50.0, 25.0, 0.0),
           child: new RaisedButton(
-            onPressed: () =>
-                getPushReplacementNavigator(context, new MyLogin()),
+            onPressed: ()=>_handNavigator(),
             child: new Text('跳过 ${se}'),
             shape: new RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(12.0),

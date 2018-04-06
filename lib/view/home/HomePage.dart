@@ -14,6 +14,7 @@ import 'package:my_flutter/view/person/UserDetails.dart';
 import 'package:my_flutter/bean/connotation/ConnotationBean.dart';
 import 'package:my_flutter/bean/connotation/ConnotationContentBean.dart' as ConnotationContentBean;
 import 'package:video_player/video_player.dart';
+import 'Connotation.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -65,107 +66,7 @@ class MyHomePageState extends State<MyHomePage>
   }
 
 
-  Widget _getContext() {
-//    print('地址：${url}');
-    if (contentBean != null) {
-      print(contentBean.length);
 
-      return new ListView.builder(
-          itemCount: contentBean.length,
-          itemBuilder: (context, i) {
-            ConnotationContentBean.DataBean bean = contentBean[i];
-            print("视频："+bean.group.mp4_url);
-            videoPlayerController = new VideoPlayerController(bean.group.mp4_url);
-            videoPlayerController.initialize();
-            videoPlayerController.setLooping(true);
-            videoPlayerController.play();
-//            Size size = videoPlayerController.value.size;
-            return new Card(
-              color: Colors.white,
-
-              elevation: 4.0,
-              child: new Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: new Column(
-                  children: <Widget>[
-                    new Row(
-                      children: <Widget>[
-                        new Image.network('${bean.group.user.avatar_url}',
-                          height: 20.0,
-                          width: 20.0,
-                        ),
-                        new Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                              10.0, 0.0, 0.0, 0.0),
-                          child: new Text('${bean.group.user.name}'),
-                        )
-                        ,
-                      ],
-                    ),
-                    new Container(
-                      padding: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 0.0),
-                      alignment: Alignment.topLeft,
-                      child: new RichText(
-
-                          text: new TextSpan(
-                              text: '',
-                              children: <TextSpan>[
-                                new TextSpan(
-                                  text: '##${bean.group.category_name}##',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .caption
-                                      .copyWith(
-                                    color: Colors.red,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                                new TextSpan(
-                                  text: '${bean.group.text}',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .caption
-                                      .copyWith(
-                                    color: Colors.red,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-
-                              ]
-                          )
-                      ),
-                    ),
-                    new GestureDetector(
-                      onTap: (){
-                        videoPlayerController.pause();
-                        handToast("点击");
-                      },
-                      child: new Center(
-                        child: new Padding(
-                          padding: const EdgeInsets.all(10.0),
-
-                          child: new AspectRatio(
-//                            aspectRatio: size.width / size.height,
-                              aspectRatio: 1280/720 ,
-//                          child: new Image.network('${bean.group.large_cover.uri}'),
-                            child: new VideoPlayer(videoPlayerController),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                  ],
-                ),
-              ),
-
-            );
-          });
-    } else {
-      return new Center(child: new CircularProgressIndicator(),);
-    }
-  }
 
 
   List<ConnotationContentBean.DataBean> contentBean;
@@ -190,7 +91,7 @@ class MyHomePageState extends State<MyHomePage>
       return new Padding(
         padding: const EdgeInsets.all(4.0),
 //          child: new Card(
-        child: _getContext(),
+        child: new Connotation(contentBean: contentBean,),
 //            color: Colors.white,
 //            elevation: 4.0,
 //          ),
