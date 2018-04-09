@@ -213,6 +213,11 @@ class GroupBean extends Object with _$GroupBeanSerializerMixin{
   int display_type;
   List<DislikeReasonBean> dislike_reason;
 
+   double max_screen_width_percent;
+   LargeImageBean large_image;
+   double min_screen_width_percent;
+   MiddleImageBean middle_image;
+
   GroupBean({this.text,this.title,this.content,this.user,this.download_url,this.type,
     this.activity,this.allow_dislike,
     this.bury_count,this.category_activity_end_time, this.category_activity_schema_url,
@@ -232,6 +237,58 @@ class GroupBean extends Object with _$GroupBeanSerializerMixin{
   factory GroupBean.fromJson(Map<String, dynamic> json) => _$GroupBeanFromJson(json);
 
 }
+
+@JsonSerializable()
+class LargeImageBean extends Object with _$LargeImageBeanSerializerMixin{
+   /**
+    * width : 202
+    * r_height : 202
+    * r_width : 202
+    * url_list : [{"url":"http://p1.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb3.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb9.pstatp.com/w202/66700002d9575e6f3ab6"}]
+    * uri : w202/66700002d9575e6f3ab6
+    * height : 202
+    */
+
+   int width;
+   int r_height;
+   int r_width;
+   String uri;
+   int height;
+   List<UrlListBeanX> url_list;
+
+   LargeImageBean({this.width,this.r_width,this.height,this.uri,this.r_height,List<UrlListBeanX> url_list
+   }):this.url_list=url_list;
+
+   factory LargeImageBean.fromJson(Map<String, dynamic> json) => _$LargeImageBeanFromJson(json);
+
+
+ }
+
+@JsonSerializable()
+ class MiddleImageBean extends Object with _$MiddleImageBeanSerializerMixin{
+   /**
+    * width : 202
+    * r_height : 202
+    * r_width : 202
+    * url_list : [{"url":"http://p1.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb3.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb9.pstatp.com/w202/66700002d9575e6f3ab6"}]
+    * uri : w202/66700002d9575e6f3ab6
+    * height : 202
+    */
+
+  double width;
+   int r_height;
+   int r_width;
+   String uri;
+   double height;
+   List<UrlListBeanX> url_list;
+
+   MiddleImageBean({this.width,this.r_width,this.height,this.uri,this.r_height,List<UrlListBeanX> url_list
+   }):this.url_list=url_list;
+
+   factory MiddleImageBean.fromJson(Map<String, dynamic> json) => _$MiddleImageBeanFromJson(json);
+
+}
+
 
 @JsonSerializable()
 class CommentsBean extends Object with _$CommentsBeanSerializerMixin{

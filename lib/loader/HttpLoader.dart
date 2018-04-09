@@ -147,7 +147,10 @@ Future<ConnotationBean> getConnotationTab() async {
 }
 Future<ConnotationContentBean> getConnotationTabContent(String url) async {
 //  Response response = await get(url);
+
   String url=HttpConnotation.URL_VIDEO;
+//  String url=HttpConnotation.URL_PIC;
+//  String url=HttpConnotation.URL_ESSAY;
   Response response = await get(url);
   print(response.body);
   Map<String,dynamic> map=JSON.decode(response.body);

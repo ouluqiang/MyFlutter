@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
+import 'package:my_flutter/view/home/ConnotationImage.dart';
 import '../person/Login.dart';
 import 'package:my_flutter/bean/xinwen/NewsBean.dart';
 import 'package:my_flutter/bean/xinwen/NewsContext.dart';
@@ -14,7 +15,7 @@ import 'package:my_flutter/view/person/UserDetails.dart';
 import 'package:my_flutter/bean/connotation/ConnotationBean.dart';
 import 'package:my_flutter/bean/connotation/ConnotationContentBean.dart' as ConnotationContentBean;
 import 'package:video_player/video_player.dart';
-import 'Connotation.dart';
+import 'ConnotationVideo.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -82,97 +83,20 @@ class MyHomePageState extends State<MyHomePage>
 
   Widget _getTabContent() {
     if (dataBean == null) {
-//      return new Center(
-//        // 可选参数 child:
-//        child: new CircularProgressIndicator(),
-//      );
-      return null;
+      return new Center(
+        // 可选参数 child:
+        child: new CircularProgressIndicator(),
+      );
     } else {
       return new Padding(
         padding: const EdgeInsets.all(4.0),
-//          child: new Card(
-        child: new Connotation(contentBean: contentBean,),
-//            color: Colors.white,
-//            elevation: 4.0,
-//          ),
+        child: new ConnotationVideo(contentBean: contentBean,),
+//        child: new ConnotationImage(contentBean: contentBean,),
       );
-//      return dataBean.map((bean){
-//        getConnotationContent(bean);
-//        return new Padding(
-//          padding: const EdgeInsets.all(10.0),
-//          child: new Card(
-//            child: _getContext(),
-//            color: Colors.white,
-//            elevation: 4.0,
-//          ),
-//        );
-//      }).toList();
-
-//      return new ListView.builder(
-//          itemCount: news.data.length,
-//          itemBuilder: (context, index) {
-//            Data data = news.data[index];
-//            Map<String, dynamic> map = JSON.decode(data.content);
-//            var contextBean = new ContextBean.fromJson(map);
-////            print('${contextBean.middle_image.url}');
-//            return new Container(
-//              padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
-//              child: new Column(
-//
-//                children: <Widget>[
-//                  new Row(
-//                    children: <Widget>[
-//                      getImage(contextBean),
-//                      new Expanded(
-//                          child: new Text('${contextBean.title}')
-//                      )
-//                    ],
-//                  ),
-//                  new Divider(),
-//                ],
-//              ),
-//            );
-//          }
-//      );
     }
   }
 
 
-//  Widget _getContext() {
-//    if (news == null) {
-//      return new Center(
-//        // 可选参数 child:
-//        child: new CircularProgressIndicator(),
-//      );
-//    } else {
-//      return new ListView.builder(
-//          itemCount: news.data.length,
-//          itemBuilder: (context, index) {
-//            Data data = news.data[index];
-//            Map<String, dynamic> map = JSON.decode(data.content);
-//            var contextBean = new ContextBean.fromJson(map);
-////            print('${contextBean.middle_image.url}');
-//            return new Container(
-//              padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
-//              child: new Column(
-//
-//                children: <Widget>[
-//                  new Row(
-//                    children: <Widget>[
-//                      getImage(contextBean),
-//                      new Expanded(
-//                          child: new Text('${contextBean.title}')
-//                      )
-//                    ],
-//                  ),
-//                  new Divider(),
-//                ],
-//              ),
-//            );
-//          }
-//      );
-//    }
-//  }
 
   Widget getImage(ContextBean contextBean) {
     if (contextBean.middle_image != null &&
@@ -198,8 +122,11 @@ class MyHomePageState extends State<MyHomePage>
 
           controller: tabController,
           children: <Widget>[
+
             _getTabContent(),
-            new Text('视频'),
+
+            new Text('推荐'),
+//            _getTabContent(),
             new Text('第一个312312'),
             new Text('第一个12312313'),
             new Text('视频'),
