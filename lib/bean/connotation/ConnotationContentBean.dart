@@ -218,6 +218,7 @@ class GroupBean extends Object with _$GroupBeanSerializerMixin{
    double min_screen_width_percent;
    MiddleImageBean middle_image;
 
+
   GroupBean({this.text,this.title,this.content,this.user,this.download_url,this.type,
     this.activity,this.allow_dislike,
     this.bury_count,this.category_activity_end_time, this.category_activity_schema_url,

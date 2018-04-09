@@ -33,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
 
   VideoPlayerController videoPlayerController;
 
@@ -81,7 +81,7 @@ class MyHomePageState extends State<MyHomePage>
     });
   }
 
-  Widget _getTabContent() {
+  Widget _getTabContentVideo() {
     if (dataBean == null) {
       return new Center(
         // 可选参数 child:
@@ -90,8 +90,21 @@ class MyHomePageState extends State<MyHomePage>
     } else {
       return new Padding(
         padding: const EdgeInsets.all(4.0),
-        child: new ConnotationVideo(contentBean: contentBean,),
-//        child: new ConnotationImage(contentBean: contentBean,),
+        child: new ConnotationVideo(url: dataBean[1].url,),
+      );
+    }
+  }
+  Widget _getTabContentImage() {
+    if (dataBean == null) {
+      return new Center(
+        // 可选参数 child:
+        child: new CircularProgressIndicator(),
+      );
+    } else {
+      return new Padding(
+        padding: const EdgeInsets.all(4.0),
+//        child: new ConnotationVideo(contentBean: contentBean,),
+        child: new ConnotationImage(contentBean: contentBean,),
       );
     }
   }
@@ -123,10 +136,11 @@ class MyHomePageState extends State<MyHomePage>
           controller: tabController,
           children: <Widget>[
 
-            _getTabContent(),
+
 
             new Text('推荐'),
-//            _getTabContent(),
+            _getTabContentVideo(),
+//            _getTabContentImage(),
             new Text('第一个312312'),
             new Text('第一个12312313'),
             new Text('视频'),
@@ -407,7 +421,7 @@ class MyHomePageState extends State<MyHomePage>
     // TODO: implement build
 
     return new Scaffold(
-      key: key,
+      key: _key,
       appBar: new AppBar(
         centerTitle: true,
         title: new Text('首页'),

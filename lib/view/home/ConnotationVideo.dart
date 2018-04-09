@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter/bean/connotation/ConnotationContentBean.dart';
 import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/loader/HttpLoader.dart';
 import 'package:video_player/video_player.dart';
 
 
 class ConnotationVideo extends StatefulWidget{
 
-  ConnotationVideo({List<DataBean> contentBean}):this.contentBean=contentBean;
+  ConnotationVideo({String url}):this.url=url;
+//  ConnotationVideo({List<DataBean> contentBean}):this.contentBean=contentBean;
 
-  List<DataBean> contentBean;
-
+//  List<DataBean> contentBean;
+  String url;
 
   @override
   State<StatefulWidget> createState() {
@@ -21,6 +25,38 @@ class ConnotationVideo extends StatefulWidget{
 
 class ConnotationVideoState extends State<ConnotationVideo>{
 
+  GlobalKey<RefreshIndicatorState> _key;
+  List<DataBean> contentBean=<DataBean>[];
+
+  String get url=>widget.url;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _key==new GlobalKey<RefreshIndicatorState>();
+    getConnotationContent(null);
+  }
+
+  getConnotationContent( Completer<Null> completer) async {
+
+    ConnotationContentBean contentBean = await getConnotationTabContent(url);
+    setState(() {
+      this.contentBean.insertAll(0, contentBean.data.data);
+      if(completer!=null){
+        completer.complete(null);
+      }
+
+
+    });
+  }
+
+  Future<Null> _handleRefresh() {
+     Completer<Null> completer = new Completer<Null>();
+    getConnotationContent(completer);
+
+    return completer.future.then((_) {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +65,26 @@ class ConnotationVideoState extends State<ConnotationVideo>{
   }
 
   Widget _getContext() {
-    if (widget.contentBean != null) {
-      print(widget.contentBean.length);
+    if (contentBean != null) {
+      print(contentBean.length);
 
-      return new ListView.builder(
-          itemCount: widget.contentBean.length,
+      return new RefreshIndicator(
+
+          key: _key,
+          child: new ListView.builder(
+//          physics: new AlwaysScrollableScrollPhysics(),
+          itemCount: contentBean.length,
           itemBuilder: (context, i) {
-            DataBean bean = widget.contentBean[i];
+            DataBean bean = contentBean[i];
             return new VideoItem(bean: bean,);
-          });
+          }), onRefresh: _handleRefresh);
+//      return new ListView.builder(
+//        physics: new AlwaysScrollableScrollPhysics(),
+//          itemCount: widget.contentBean.length,
+//          itemBuilder: (context, i) {
+//            DataBean bean = widget.contentBean[i];
+//            return new VideoItem(bean: bean,);
+//          });
     } else {
       return new Center(child: new CircularProgressIndicator(),);
     }
