@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
+import 'package:my_flutter/view/home/ConnotationEssay.dart';
 import 'package:my_flutter/view/home/ConnotationImage.dart';
 import '../person/Login.dart';
 import 'package:my_flutter/bean/xinwen/NewsBean.dart';
@@ -42,7 +43,6 @@ class MyHomePageState extends State<MyHomePage>
   List<Tab> tabs;
   TabController tabController;
 
-//  News news;
 
   Widget _getButton() {
     if (_index == 0) {
@@ -103,8 +103,33 @@ class MyHomePageState extends State<MyHomePage>
     } else {
       return new Padding(
         padding: const EdgeInsets.all(4.0),
-//        child: new ConnotationVideo(contentBean: contentBean,),
-        child: new ConnotationImage(contentBean: contentBean,),
+        child: new ConnotationImage(url: dataBean[2].url,),
+      );
+    }
+  }
+  Widget _getTabContentEssay() {
+    if (dataBean == null) {
+      return new Center(
+        // 可选参数 child:
+        child: new CircularProgressIndicator(),
+      );
+    } else {
+      return new Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: new ConnotationEssay(url: dataBean[3].url,),
+      );
+    }
+  }
+  Widget _getTabContentSubscription() {
+    if (dataBean == null) {
+      return new Center(
+        // 可选参数 child:
+        child: new CircularProgressIndicator(),
+      );
+    } else {
+      return new Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: new ConnotationEssay(url: dataBean[4].url,),
       );
     }
   }
@@ -140,9 +165,9 @@ class MyHomePageState extends State<MyHomePage>
 
             new Text('推荐'),
             _getTabContentVideo(),
-//            _getTabContentImage(),
-            new Text('第一个312312'),
-            new Text('第一个12312313'),
+            _getTabContentImage(),
+            _getTabContentEssay(),
+//            _getTabContentSubscription(),
             new Text('视频'),
             new Text('第一个312312'),
             new Text('第一个12312313'),

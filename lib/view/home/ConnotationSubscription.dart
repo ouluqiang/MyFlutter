@@ -6,9 +6,9 @@ import 'package:my_flutter/config/CodeConfig.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
 
 
-class ConnotationImage extends StatefulWidget {
+class ConnotationSubscription extends StatefulWidget {
 
-  ConnotationImage({String url}) :this.url=url;
+  ConnotationSubscription({String url}) :this.url=url;
 
   String url;
 
@@ -16,12 +16,12 @@ class ConnotationImage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return new ConnotationImageState();
+    return new ConnotationSubscriptionState();
   }
 
 }
 
-class ConnotationImageState extends State<ConnotationImage> {
+class ConnotationSubscriptionState extends State<ConnotationSubscription> {
 
   GlobalKey<RefreshIndicatorState> _key;
   List<DataBean> contentBean = <DataBean>[];
@@ -111,11 +111,9 @@ class ImageItemState extends State<ImageItem> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print(bean.group.middle_image.url_list.length);
     return new Card(
       color: Colors.white,
       elevation: 4.0,
@@ -173,7 +171,7 @@ class ImageItemState extends State<ImageItem> {
                   )
               ),
             ),
-            getImage(),
+//            getImage(),
 
 //            new GridView.builder(
 //              itemCount: bean.group.middle_image.url_list.length,

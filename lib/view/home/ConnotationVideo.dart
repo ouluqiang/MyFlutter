@@ -38,6 +38,13 @@ class ConnotationVideoState extends State<ConnotationVideo>{
     getConnotationContent(null);
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _key.currentState.dispose();
+    super.dispose();
+  }
+
   getConnotationContent( Completer<Null> completer) async {
 
     ConnotationContentBean contentBean = await getConnotationTabContent(url);
@@ -250,17 +257,19 @@ class VideoItemState extends State<VideoItem>{
               .play();
         },
         child: new AspectRatio(
-//                            aspectRatio: size.width / size.height,
             aspectRatio: 1280 / 720,
-//                          child: new Image.network('${bean.group.large_cover.uri}'),
-            child: new Stack(
-              children: <Widget>[
-                new VideoPlayer(_controller),
-                new Center(
 
-                  child: Video(),
-                ),
-              ],
+            child: new Container(
+              color: Colors.black,
+              child: new Stack(
+                children: <Widget>[
+                  new VideoPlayer(_controller),
+                  new Center(
+
+                    child: Video(),
+                  ),
+                ],
+              ),
             )
         ),
       );
