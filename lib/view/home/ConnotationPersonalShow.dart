@@ -8,9 +8,9 @@ import 'package:my_flutter/loader/HttpLoader.dart';
 import 'package:video_player/video_player.dart';
 
 
-class ConnotationEssay extends StatefulWidget {
+class ConnotationPersonalShow extends StatefulWidget {
 
-  ConnotationEssay({String url}) :this.url=url;
+  ConnotationPersonalShow({String url}) :this.url=url;
 
   String url;
 
@@ -18,12 +18,12 @@ class ConnotationEssay extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return new ConnotationEssayState();
+    return new ConnotationPersonalShowState();
   }
 
 }
 
-class ConnotationEssayState extends State<ConnotationEssay> {
+class ConnotationPersonalShowState extends State<ConnotationPersonalShow> {
 
   GlobalKey<RefreshIndicatorState> _key= new GlobalKey<RefreshIndicatorState>();
   List<DataBean> contentBean = <DataBean>[];
@@ -45,7 +45,7 @@ class ConnotationEssayState extends State<ConnotationEssay> {
 //  }
 
   getConnotationContent(Completer<Null> completer) async {
-    ConnotationContentBean contentBean = await getConnotationTabContent(HttpConnotation.URL_ESSAY_PARAM);
+    ConnotationContentBean contentBean = await getConnotationTabContent(HttpConnotation.URL_PERSONAL_SHOW_PARAM);
     setState(() {
       this.contentBean.insertAll(0, contentBean.data.data);
       if (completer != null) {
@@ -76,7 +76,7 @@ class ConnotationEssayState extends State<ConnotationEssay> {
               itemCount: contentBean.length,
               itemBuilder: (context, i) {
                 DataBean bean = contentBean[i];
-                return new EssayItem(bean: bean,);
+                return new PersonalShowItem(bean: bean,);
               }),
           onRefresh: _handleRefresh);
     } else {
@@ -87,32 +87,86 @@ class ConnotationEssayState extends State<ConnotationEssay> {
 }
 
 
-class EssayItem extends StatefulWidget {
+class PersonalShowItem extends StatefulWidget {
 
-  EssayItem({this.bean});
+  PersonalShowItem({this.bean});
 
   DataBean bean;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return new EssayItemState();
+    return new PersonalShowItemState();
   }
 
 }
 
-class EssayItemState extends State<EssayItem> {
+class PersonalShowItemState extends State<PersonalShowItem> {
 
   DataBean get bean => widget.bean;
+  VideoPlayerController _controller;
+  bool _isPlaying = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("视频：" + bean.group.mp4_url);
+    init();
+//    _controller.play();
   }
 
+  init() {
+    if(bean.group.mp4_url!=null){
+      _controller=new VideoPlayerController(bean.group.mp4_url);
+      _controller.addListener(() {
+        final bool isPlaying = _controller.value.isPlaying;
+        if (isPlaying != _isPlaying) {
+          setState(() {
+            _isPlaying = isPlaying;
+          });
+        }
+      });
+      _controller.initialize();
+      _controller.setLooping(true);
+      _controller.setVolume(1.0);
+    }
 
+  }
 
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    dea();
+    super.deactivate();
+  }
+
+  dea() {
+    if(_controller!=null) {
+      _controller.setVolume(0.0);
+      _controller.removeListener(() {
+        final bool isPlaying = _controller.value.isPlaying;
+        if (isPlaying != _isPlaying) {
+          setState(() {
+            _isPlaying = isPlaying;
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    dis();
+    super.dispose();
+  }
+
+  void dis() {
+    if(_controller!=null) {
+      _controller.dispose();
+    }
+  }
 
 
   @override
@@ -175,6 +229,7 @@ class EssayItemState extends State<EssayItem> {
                   )
               ),
             ),
+              getVideo(),
 
           ],
         ),
@@ -183,6 +238,44 @@ class EssayItemState extends State<EssayItem> {
     );
   }
 
+  Widget getVideo() {
+    if(_controller!=null) {
+      return new GestureDetector(
+        onTap: () {
+          _controller.value.isPlaying ? _controller.pause() : _controller
+              .play();
+        },
+        child: new AspectRatio(
+            aspectRatio: 1280 / 720,
+
+            child: new Container(
+              color: Colors.black,
+              child: new Stack(
+                children: <Widget>[
+                  new VideoPlayer(_controller),
+                  new Center(
+
+                    child: Video(),
+                  ),
+                ],
+              ),
+            )
+        ),
+      );
+    }else{
+      return null;
+    }
+  }
+
+
+  Widget Video(){
+    if(_isPlaying){
+      return  null;
+    }else{
+      return  new Icon(Icons.play_arrow,size: 20.0, color: Colors.red,);
+    }
+
+  }
 
 
   Widget getIcon() {

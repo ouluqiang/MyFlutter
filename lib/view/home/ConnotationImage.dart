@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_flutter/bean/connotation/ConnotationContentBean.dart';
 import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/loader/HttpConfig.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
 
 
 class ConnotationImage extends StatefulWidget {
 
-  ConnotationImage({String url}) :this.url=url;
+  ConnotationImage({Key key, this.url}) :super(key:key);
 
   String url;
 
@@ -23,7 +24,7 @@ class ConnotationImage extends StatefulWidget {
 
 class ConnotationImageState extends State<ConnotationImage> {
 
-  GlobalKey<RefreshIndicatorState> _key;
+  GlobalKey<RefreshIndicatorState> _key = new GlobalKey<RefreshIndicatorState>();
   List<DataBean> contentBean = <DataBean>[];
 
   String get url => widget.url;
@@ -32,21 +33,23 @@ class ConnotationImageState extends State<ConnotationImage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _key == new GlobalKey<RefreshIndicatorState>();
+
     getConnotationContent(null);
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _key.currentState.dispose();
-    super.dispose();
-  }
+//  @override
+//  void dispose() {
+//    // TODO: implement dispose
+//    _key.currentState.dispose();
+//    super.dispose();
+//  }
 
   getConnotationContent(Completer<Null> completer) async {
-    ConnotationContentBean contentBean = await getConnotationTabContent(url);
+    ConnotationContentBean contentBean = await getConnotationTabContent(HttpConnotation.URL_PIC_PARAM);
     setState(() {
-      this.contentBean.insertAll(0, contentBean.data.data);
+      if(contentBean.data!=null){
+        this.contentBean.insertAll(0, contentBean.data.data);
+      }
       if (completer != null) {
         completer.complete(null);
       }
@@ -70,6 +73,7 @@ class ConnotationImageState extends State<ConnotationImage> {
   Widget _getContext() {
     if (contentBean != null) {
       return new RefreshIndicator(
+        key: _key,
           child: new ListView.builder(
               itemCount: contentBean.length,
               itemBuilder: (context, i) {
@@ -115,7 +119,8 @@ class ImageItemState extends State<ImageItem> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print(bean.group.middle_image.url_list.length);
+//    print(bean.group.middle_image.url_list.length);
+
     return new Card(
       color: Colors.white,
       elevation: 4.0,
@@ -164,7 +169,7 @@ class ImageItemState extends State<ImageItem> {
                               .textTheme
                               .caption
                               .copyWith(
-                            color: Colors.red,
+                            color: Colors.black,
                             fontSize: 16.0,
                           ),
                         ),
@@ -173,22 +178,23 @@ class ImageItemState extends State<ImageItem> {
                   )
               ),
             ),
-            getImage(),
+//            getImage(),
 
-//            new GridView.builder(
-//              itemCount: bean.group.middle_image.url_list.length,
-//              shrinkWrap: true,
-//                primary: false,
-//                padding: const EdgeInsets.all(4.0),
-//                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-//                  crossAxisCount: 3,
-//                  mainAxisSpacing: 4.0,
-//                  crossAxisSpacing: 4.0,
-//                ),
-//                itemBuilder: (context,i){
-//                  return new Image.network(bean.group.middle_image.url_list[i].url);
-//                }
-//            ),
+            new GridView.builder(
+              itemCount: bean.group.thumb_image_list.length,
+              shrinkWrap: true,
+                primary: false,
+                padding: const EdgeInsets.all(4.0),
+                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 4.0,
+                  crossAxisSpacing: 4.0,
+                ),
+                itemBuilder: (context,i){
+                  print(bean.group.thumb_image_list[0].url);
+                  return new Image.network(bean.group.thumb_image_list[i].url);
+                }
+            ),
 
           ],
         ),
@@ -197,15 +203,15 @@ class ImageItemState extends State<ImageItem> {
     );
   }
 
-  Widget getImage() {
-//    height: bean.group.middle_image.height,width: bean.group.middle_image.width,
-//    print("第1 ${bean.group.middle_image.url_list[0].url}");
-//    print("第2 ${bean.group.middle_image.url_list[1].url}");
-//    print("第3 ${bean.group.middle_image.url_list[2].url}");
-    return new Image.network(bean.group.middle_image.url_list[0].url,);
-//    return new Image.network('http://pb3.pstatp.com/large/69c5000365122380c0d6');
-
-  }
+//  Widget getImage() {
+////    height: bean.group.middle_image.height,width: bean.group.middle_image.width,
+////    print("第1 ${bean.group.middle_image.url_list[0].url}");
+////    print("第2 ${bean.group.middle_image.url_list[1].url}");
+////    print("第3 ${bean.group.middle_image.url_list[2].url}");
+//    return new Image.network(bean.group.middle_image.url_list[0].url,);
+////    return new Image.network('http://pb3.pstatp.com/large/69c5000365122380c0d6');
+//
+//  }
 
   Widget getIcon() {
     if (bean.group.user.medals != null && bean.group.user.medals.length > 0) {

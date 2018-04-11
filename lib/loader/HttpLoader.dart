@@ -138,7 +138,7 @@ Future<int> getRegister(BuildContext context, String phone, String password) asy
 }
 
 Future<ConnotationBean> getConnotationTab() async {
-  String url=HttpConnotation.URL_CONNOTATION;
+  String url=HttpConnotation.URL_CONNOTATION_TAB;
   Response response = await get(url);
   print(response.body);
   Map<String,dynamic> map=JSON.decode(response.body);
@@ -151,8 +151,9 @@ Future<ConnotationContentBean> getConnotationTabContent(String url) async {
 //  String url=HttpConnotation.URL_VIDEO;
 //  String url=HttpConnotation.URL_PIC;
 //  String url=HttpConnotation.URL_ESSAY;
+print('url:${url}');
   Response response = await get(url);
-  print(response.body);
+  print('body:${response.body}');
   Map<String,dynamic> map=JSON.decode(response.body);
   var connotation= new ConnotationContentBean.fromJson(map);
 //  return connotation;

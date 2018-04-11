@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
 import 'package:my_flutter/view/home/ConnotationEssay.dart';
 import 'package:my_flutter/view/home/ConnotationImage.dart';
+import 'package:my_flutter/view/home/ConnotationPersonalShow.dart';
 import '../person/Login.dart';
 import 'package:my_flutter/bean/xinwen/NewsBean.dart';
 import 'package:my_flutter/bean/xinwen/NewsContext.dart';
@@ -70,16 +71,16 @@ class MyHomePageState extends State<MyHomePage>
 
 
 
-  List<ConnotationContentBean.DataBean> contentBean;
+//  List<ConnotationContentBean.DataBean> contentBean;
 
-  getConnotationContent(DataBean bean) async {
-    ConnotationContentBean
-        .ConnotationContentBean contentBean = await getConnotationTabContent(
-        bean.url);
-    setState(() {
-      this.contentBean = contentBean.data.data;
-    });
-  }
+//  getConnotationContent(DataBean bean) async {
+//    ConnotationContentBean
+//        .ConnotationContentBean contentBean = await getConnotationTabContent(
+//        bean.url);
+//    setState(() {
+//      this.contentBean = contentBean.data.data;
+//    });
+//  }
 
   Widget _getTabContentVideo() {
     if (dataBean == null) {
@@ -120,6 +121,20 @@ class MyHomePageState extends State<MyHomePage>
       );
     }
   }
+  Widget _getTabContentPersonalShow() {
+    if (dataBean == null) {
+      return new Center(
+        // 可选参数 child:
+        child: new CircularProgressIndicator(),
+      );
+    } else {
+      return new Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: new ConnotationPersonalShow(url: dataBean[4].url,),
+      );
+    }
+  }
+
   Widget _getTabContentSubscription() {
     if (dataBean == null) {
       return new Center(
@@ -163,10 +178,13 @@ class MyHomePageState extends State<MyHomePage>
 
 
 
+//            new Text('关注'),
+//            new Text('推荐'),
+//            _getTabContentVideo(),
+//            _getTabContentImage(),
             new Text('推荐'),
-            _getTabContentVideo(),
-            _getTabContentImage(),
-            _getTabContentEssay(),
+//            _getTabContentEssay(),
+//            _getTabContentPersonalShow(),
 //            _getTabContentSubscription(),
             new Text('视频'),
             new Text('第一个312312'),
@@ -211,14 +229,34 @@ class MyHomePageState extends State<MyHomePage>
     setState(() {
       this.dataBean = connotationBean.data;
     });
-    tabs = <Tab>[];
-    for (int i = 0; i < dataBean.length; i++) {
-      tabs.add(new Tab(
-        child: new Tab(text: '${dataBean[i].name}'),
-      ));
-    }
+//    tabs = <Tab>[];
+//    for (int i = 0; i < dataBean.length; i++) {
+//      print('${dataBean[i].name}---${dataBean[i].url}');
+//      tabs.add(new Tab(
+//        child: new Tab(text: '${dataBean[i].name}'),
+//      ));
+//    }
+        tabs = <Tab>[
+      new Tab(
+        text: '视频',
+        icon: new Icon(Icons.title),
+      ),
+      new Tab(
+        text: '图片',
+        icon: new Icon(Icons.title),
+      ),
+      new Tab(
+        text: '段子',
+        icon: new Icon(Icons.title),
+      ),
+      new Tab(
+        text: '段友秀',
+        icon: new Icon(Icons.title),
+      ),
+
+    ];
     tabController = new TabController(length: tabs.length, vsync: this);
-    getConnotationContent(dataBean[0]);
+//    getConnotationContent(dataBean[0]);
   }
 
   Future<SharedPreferences> preferences = SharedPreferences.getInstance();
@@ -255,25 +293,7 @@ class MyHomePageState extends State<MyHomePage>
         title: new Text('阿三'),
       ),
     ];
-//    tabs = <Tab>[
-////      new Tab(
-////        text: '推荐',
-////        icon: new Icon(Icons.title),
-////      ),
-////      new Tab(
-////        text: '第一个',
-////        icon: new Icon(Icons.title),
-////      ),
-////      new Tab(
-////        text: '第一个',
-////        icon: new Icon(Icons.title),
-////      ),
-////      new Tab(
-////        text: '第一个',
-////        icon: new Icon(Icons.title),
-////      ),
-//
-//    ];
+
 
   }
 

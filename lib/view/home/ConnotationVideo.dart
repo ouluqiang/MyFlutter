@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_flutter/bean/connotation/ConnotationContentBean.dart';
 import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/loader/HttpConfig.dart';
 import 'package:my_flutter/loader/HttpLoader.dart';
 import 'package:video_player/video_player.dart';
 
 
 class ConnotationVideo extends StatefulWidget{
 
-  ConnotationVideo({String url}):this.url=url;
+  ConnotationVideo({Key key,this.url}):super(key:key);
 //  ConnotationVideo({List<DataBean> contentBean}):this.contentBean=contentBean;
 
 //  List<DataBean> contentBean;
@@ -25,7 +26,7 @@ class ConnotationVideo extends StatefulWidget{
 
 class ConnotationVideoState extends State<ConnotationVideo>{
 
-  GlobalKey<RefreshIndicatorState> _key;
+  GlobalKey<RefreshIndicatorState> _key=new GlobalKey<RefreshIndicatorState>();
   List<DataBean> contentBean=<DataBean>[];
 
   String get url=>widget.url;
@@ -34,27 +35,24 @@ class ConnotationVideoState extends State<ConnotationVideo>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    _key==new GlobalKey<RefreshIndicatorState>();
     getConnotationContent(null);
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _key.currentState.dispose();
-    super.dispose();
-  }
+//  @override
+//  void dispose() {
+//    // TODO: implement dispose
+//    _key.currentState.dispose();
+//    super.dispose();
+//  }
 
   getConnotationContent( Completer<Null> completer) async {
 
-    ConnotationContentBean contentBean = await getConnotationTabContent(url);
+    ConnotationContentBean contentBean = await getConnotationTabContent(HttpConnotation.URL_VIDEO_PARAM);
     setState(() {
       this.contentBean.insertAll(0, contentBean.data.data);
       if(completer!=null){
         completer.complete(null);
       }
-
-
     });
   }
 
@@ -231,7 +229,7 @@ class VideoItemState extends State<VideoItem>{
                               .textTheme
                               .caption
                               .copyWith(
-                            color: Colors.red,
+                            color: Colors.black,
                             fontSize: 16.0,
                           ),
                         ),

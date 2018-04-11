@@ -162,7 +162,7 @@ class ImageItemState extends State<ImageItem> {
                               .textTheme
                               .caption
                               .copyWith(
-                            color: Colors.red,
+                            color: Colors.black,
                             fontSize: 16.0,
                           ),
                         ),
@@ -200,8 +200,8 @@ class ImageItemState extends State<ImageItem> {
 //    print("第1 ${bean.group.middle_image.url_list[0].url}");
 //    print("第2 ${bean.group.middle_image.url_list[1].url}");
 //    print("第3 ${bean.group.middle_image.url_list[2].url}");
-    return new Image.network(bean.group.middle_image.url_list[0].url,);
-//    return new Image.network('http://pb3.pstatp.com/large/69c5000365122380c0d6');
+//    return new Image.network(bean.group.middle_image.url_list[0].url,);
+    return new Image.network('http://pb3.pstatp.com/large/69c5000365122380c0d6');
 
   }
 

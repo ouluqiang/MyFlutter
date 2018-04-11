@@ -15,6 +15,11 @@ class ConnotationContentBean extends Object with _$ConnotationContentBeanSeriali
 
 }
 
+
+
+
+
+
 @JsonSerializable()
 class DataBeanX extends Object with _$DataBeanXSerializerMixin{
   /**
@@ -213,10 +218,20 @@ class GroupBean extends Object with _$GroupBeanSerializerMixin{
   int display_type;
   List<DislikeReasonBean> dislike_reason;
 
+  
    double max_screen_width_percent;
-   LargeImageBean large_image;
+//   LargeImageBean large_image;
    double min_screen_width_percent;
-   MiddleImageBean middle_image;
+//   MiddleImageBean middle_image;
+
+   
+   String neihan_hot_start_time;
+   String neihan_hot_end_time;
+   bool is_neihan_hot;
+   NeihanHotLinkBean neihan_hot_link;
+   int is_multi_image;
+   List<LargeImageListBean> large_image_list;
+   List<ThumbImageListBean> thumb_image_list;
 
 
   GroupBean({this.text,this.title,this.content,this.user,this.download_url,this.type,
@@ -231,64 +246,125 @@ class GroupBean extends Object with _$GroupBeanSerializerMixin{
     this.medium_cover,this.mp4_url,this.online_time,this.origin_video,this.play_count, this.publish_time,
     this.repin_count,this.share_count,this.share_type,this.share_url,this.status,this.status_desc,this.uri,
     this.user_bury, this.user_digg,this.user_favorite,this.user_repin,this.video_height,this.video_id,
-    this.video_width,$360pVideoBean $360p_video,$480pVideoBean $480p_video,$720pVideoBean $720p_video,List<DislikeReasonBean> dislike_reason,
-  }):this._$360p_video=$360p_video,this._$480p_video=$480p_video,this._$720p_video=$720p_video,this.dislike_reason=dislike_reason??<DislikeReasonBean>[];
+    this.video_width,$360pVideoBean $360p_video,$480pVideoBean $480p_video,$720pVideoBean $720p_video,this.is_multi_image,this.is_neihan_hot,this.max_screen_width_percent,this.min_screen_width_percent,this.neihan_hot_end_time,this.neihan_hot_link,this.neihan_hot_start_time,List<DislikeReasonBean> dislike_reason,List<LargeImageListBean> large_image_list,List<ThumbImageListBean> thumb_image_list,
+  }):this._$360p_video=$360p_video,this._$480p_video=$480p_video,this._$720p_video=$720p_video,this.dislike_reason=dislike_reason??<DislikeReasonBean>[],this.large_image_list=large_image_list??<LargeImageListBean>[],this.thumb_image_list=thumb_image_list??<ThumbImageListBean>[];
 
 
   factory GroupBean.fromJson(Map<String, dynamic> json) => _$GroupBeanFromJson(json);
 
 }
 
+//@JsonSerializable()
+//class LargeImageBean extends Object with _$LargeImageBeanSerializerMixin{
+//   /**
+//    * width : 202
+//    * r_height : 202
+//    * r_width : 202
+//    * url_list : [{"url":"http://p1.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb3.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb9.pstatp.com/w202/66700002d9575e6f3ab6"}]
+//    * uri : w202/66700002d9575e6f3ab6
+//    * height : 202
+//    */
+//
+//   int width;
+//   int r_height;
+//   int r_width;
+//   String uri;
+//   int height;
+//   List<UrlListBeanX> url_list;
+//
+//   LargeImageBean({this.width,this.r_width,this.height,this.uri,this.r_height,List<UrlListBeanX> url_list
+//   }):this.url_list=url_list;
+//
+//   factory LargeImageBean.fromJson(Map<String, dynamic> json) => _$LargeImageBeanFromJson(json);
+//
+//
+// }
+
+@JsonSerializable(createToJson: false)
+class NeihanHotLinkBean {
+
+
+  NeihanHotLinkBean();
+
+  factory NeihanHotLinkBean.fromJson(Map<String, dynamic> json) => _$NeihanHotLinkBeanFromJson(json);
+
+
+  }
+
 @JsonSerializable()
-class LargeImageBean extends Object with _$LargeImageBeanSerializerMixin{
-   /**
-    * width : 202
-    * r_height : 202
-    * r_width : 202
-    * url_list : [{"url":"http://p1.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb3.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb9.pstatp.com/w202/66700002d9575e6f3ab6"}]
-    * uri : w202/66700002d9575e6f3ab6
-    * height : 202
-    */
+class LargeImageListBean extends Object with _$LargeImageListBeanSerializerMixin{
+  /**
+   * url : http://p1.pstatp.com/list/s362/75a00000ef6a946d1efe.webp
+   * url_list : [{"url":"http://p1.pstatp.com/list/s362/75a00000ef6a946d1efe.webp"},{"url":"http://pb3.pstatp.com/list/s362/75a00000ef6a946d1efe.webp"},{"url":"http://pb3.pstatp.com/list/s362/75a00000ef6a946d1efe.webp"}]
+   * uri : list/s362/75a00000ef6a946d1efe
+   * height : 362
+   * width : 362
+   * is_gif : false
+   */
 
-   int width;
-   int r_height;
-   int r_width;
-   String uri;
-   int height;
-   List<UrlListBeanX> url_list;
+  String url;
+  String uri;
+  int height;
+  int width;
+  bool is_gif;
+  List<UrlListBeanX> url_list;
 
-   LargeImageBean({this.width,this.r_width,this.height,this.uri,this.r_height,List<UrlListBeanX> url_list
+  LargeImageListBean({this.width,this.height,this.uri,this.url,this.is_gif,List<UrlListBeanX> url_list
    }):this.url_list=url_list;
 
-   factory LargeImageBean.fromJson(Map<String, dynamic> json) => _$LargeImageBeanFromJson(json);
-
-
- }
+  factory LargeImageListBean.fromJson(Map<String, dynamic> json) => _$LargeImageListBeanFromJson(json);
+}
 
 @JsonSerializable()
- class MiddleImageBean extends Object with _$MiddleImageBeanSerializerMixin{
-   /**
-    * width : 202
-    * r_height : 202
-    * r_width : 202
-    * url_list : [{"url":"http://p1.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb3.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb9.pstatp.com/w202/66700002d9575e6f3ab6"}]
-    * uri : w202/66700002d9575e6f3ab6
-    * height : 202
-    */
+class ThumbImageListBean extends Object with _$ThumbImageListBeanSerializerMixin{
+  /**
+   * url : http://p1.pstatp.com/list/s362/75a00000ef6a946d1efe.webp
+   * url_list : [{"url":"http://p1.pstatp.com/list/s362/75a00000ef6a946d1efe.webp"},{"url":"http://pb3.pstatp.com/list/s362/75a00000ef6a946d1efe.webp"},{"url":"http://pb3.pstatp.com/list/s362/75a00000ef6a946d1efe.webp"}]
+   * uri : list/s362/75a00000ef6a946d1efe
+   * height : 362
+   * width : 362
+   * is_gif : false
+   */
 
-  double width;
-   int r_height;
-   int r_width;
-   String uri;
-   double height;
-   List<UrlListBeanX> url_list;
+  String url;
+  String uri;
+  int height;
+  int width;
+  bool is_gif;
+  List<UrlListBeanX> url_list;
 
-   MiddleImageBean({this.width,this.r_width,this.height,this.uri,this.r_height,List<UrlListBeanX> url_list
-   }):this.url_list=url_list;
 
-   factory MiddleImageBean.fromJson(Map<String, dynamic> json) => _$MiddleImageBeanFromJson(json);
+  ThumbImageListBean({this.width,this.height,this.uri,this.url,this.is_gif,List<UrlListBeanX> url_list
+  }):this.url_list=url_list;
+
+  factory ThumbImageListBean.fromJson(Map<String, dynamic> json) => _$ThumbImageListBeanFromJson(json);
 
 }
+
+//@JsonSerializable()
+// class MiddleImageBean extends Object with _$MiddleImageBeanSerializerMixin{
+//   /**
+//    * width : 202
+//    * r_height : 202
+//    * r_width : 202
+//    * url_list : [{"url":"http://p1.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb3.pstatp.com/w202/66700002d9575e6f3ab6"},{"url":"http://pb9.pstatp.com/w202/66700002d9575e6f3ab6"}]
+//    * uri : w202/66700002d9575e6f3ab6
+//    * height : 202
+//    */
+//
+//  double width;
+//   int r_height;
+//   int r_width;
+//   String uri;
+//   double height;
+//   List<UrlListBeanX> url_list;
+//
+//   MiddleImageBean({this.width,this.r_width,this.height,this.uri,this.r_height,List<UrlListBeanX> url_list
+//   }):this.url_list=url_list;
+//
+//   factory MiddleImageBean.fromJson(Map<String, dynamic> json) => _$MiddleImageBeanFromJson(json);
+//
+//}
 
 
 @JsonSerializable()
