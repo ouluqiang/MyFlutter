@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_flutter/loader/HttpLoader.dart';
-
+import 'package:my_flutter/config/NavigatorConfig.dart';
 
 class MyUserDetails extends StatefulWidget {
 

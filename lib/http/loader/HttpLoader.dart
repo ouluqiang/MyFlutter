@@ -2,58 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'HttpConfig.dart';
+import 'package:my_flutter/http/HttpConfig.dart';
 import 'package:my_flutter/view/home/HomePage.dart';
 import 'package:my_flutter/bean/user/BaseBean.dart';
 import 'package:my_flutter/bean/xinwen/NewsBean.dart';
-import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/config/MethodConfig.dart';
 import 'package:my_flutter/bean/user/UserBean.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_flutter/bean/connotation/ConnotationBean.dart';
-import 'package:my_flutter/bean/connotation/ConnotationContentBean.dart'  show ConnotationContentBean;
+import 'package:my_flutter/config/PreferencesConfig.dart';
+import 'package:my_flutter/config/NavigatorConfig.dart';
 
-/**
- * 跳转界面
- */
-getPushNavigator(BuildContext context,Widget widget) {
-  Navigator.push(context,
-      new MaterialPageRoute(builder: (BuildContext context) {
-          return widget;
-      })
-  );
-}
-Future<String> getPushNavigator2(BuildContext context,Widget widget) {
- return Navigator.push(context,
-      new MaterialPageRoute<String>(builder: (BuildContext context) {
-          return widget;
-      })
-  );
-}
 
-/**
- * 跳转界面，销毁当前界面
- */
-getPushReplacementNavigator(BuildContext context,Widget widget) {
-  Navigator.pushReplacement(
-      context,
-      new MaterialPageRoute(
-          builder: (BuildContext context) {
-            return widget;
-          }
-      )
-  );
-}
-
-/**
- * 销毁当前界面跟dialog，popupwindow
- */
-getPopNavigator2(BuildContext context,String s){
-  Navigator.pop(context,s);
-}
-
-getPopNavigator(BuildContext context){
-  Navigator.pop(context);
-}
 
 /**
  * 请求加载
@@ -90,9 +49,9 @@ Future<int> getLogin(BuildContext context, String phone, String password) async 
     Map<String,dynamic> s=JSON.decode(response.body);
     var userBean=new UserBean.fromJson(s);
     SharedPreferences sp=await SharedPreferences.getInstance();
-    sp.setString(SESSION_TOKEN, userBean.sessionToken);
-    sp.setString(USERNAME, userBean.username);
-    sp.setString(OBJECT_ID, userBean.objectId);
+    sp.setString(SpConfig.SESSION_TOKEN, userBean.sessionToken);
+    sp.setString(SpConfig.USERNAME, userBean.username);
+    sp.setString(SpConfig.OBJECT_ID, userBean.objectId);
     getPopNavigator(context);
     getPopNavigator2(context,userBean.username);
 //    getPushReplacementNavigator(context, new MyHomePage());
@@ -103,8 +62,8 @@ Future<int> getLogin(BuildContext context, String phone, String password) async 
 
 Future<String> getCheckSession(BuildContext context) async {
   SharedPreferences sp=await SharedPreferences.getInstance();
-  String objectId=sp.getString(OBJECT_ID);
-  String token=sp.getString(SESSION_TOKEN);
+  String objectId=sp.getString(SpConfig.OBJECT_ID);
+  String token=sp.getString(SpConfig.SESSION_TOKEN);
 //  print(objectId);
   if(objectId!=null) {
     var url = HttpBase.CHECK_SESSION + objectId;
@@ -137,28 +96,28 @@ Future<int> getRegister(BuildContext context, String phone, String password) asy
   return baseBean.code;
 }
 
-Future<ConnotationBean> getConnotationTab() async {
-  String url=HttpConnotation.URL_CONNOTATION_TAB;
-  Response response = await get(url);
-  print(response.body);
-  Map<String,dynamic> map=JSON.decode(response.body);
-  var connotation= new ConnotationBean.fromJson(map);
-  return connotation;
-}
-Future<ConnotationContentBean> getConnotationTabContent(String url) async {
+//Future<ConnotationBean> getConnotationTab() async {
+//  String url=HttpConnotation.URL_CONNOTATION_TAB;
 //  Response response = await get(url);
-
-//  String url=HttpConnotation.URL_VIDEO;
-//  String url=HttpConnotation.URL_PIC;
-//  String url=HttpConnotation.URL_ESSAY;
-print('url:${url}');
-  Response response = await get(url);
-  print('body:${response.body}');
-  Map<String,dynamic> map=JSON.decode(response.body);
-  var connotation= new ConnotationContentBean.fromJson(map);
+//  print(response.body);
+//  Map<String,dynamic> map=JSON.decode(response.body);
+//  var connotation= new ConnotationBean.fromJson(map);
 //  return connotation;
-return connotation;
-}
+//}
+//Future<ConnotationContentBean> getConnotationTabContent(String url) async {
+////  Response response = await get(url);
+//
+////  String url=HttpConnotation.URL_VIDEO;
+////  String url=HttpConnotation.URL_PIC;
+////  String url=HttpConnotation.URL_ESSAY;
+//print('url:${url}');
+//  Response response = await get(url);
+//  print('body:${response.body}');
+//  Map<String,dynamic> map=JSON.decode(response.body);
+//  var connotation= new ConnotationContentBean.fromJson(map);
+////  return connotation;
+//return connotation;
+//}
 
 
 //Future<News> getXinwen(BuildContext context, String category, String min_behot_time,String last_refresh_sub_entrance_interval,

@@ -2,9 +2,7 @@ import 'package:flutter/services.dart';
 
 
 
-final SESSION_TOKEN='sessionToken';
-final USERNAME='username';
-final OBJECT_ID='objectId';
+
 
 
 

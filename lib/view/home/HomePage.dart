@@ -1,499 +1,414 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:my_flutter/loader/HttpLoader.dart';
-import 'package:my_flutter/view/home/ConnotationEssay.dart';
-import 'package:my_flutter/view/home/ConnotationImage.dart';
-import 'package:my_flutter/view/home/ConnotationPersonalShow.dart';
-import '../person/Login.dart';
-import 'package:my_flutter/bean/xinwen/NewsBean.dart';
-import 'package:my_flutter/bean/xinwen/NewsContext.dart';
-import 'package:http/http.dart';
-import 'package:my_flutter/loader/HttpConfig.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_flutter/config/CodeConfig.dart';
-import 'package:my_flutter/view/person/UserDetails.dart';
-import 'package:my_flutter/bean/connotation/ConnotationBean.dart';
-import 'package:my_flutter/bean/connotation/ConnotationContentBean.dart' as ConnotationContentBean;
-import 'package:video_player/video_player.dart';
-import 'ConnotationVideo.dart';
+import 'package:my_flutter/widget/my/MyDrawer.dart';
 
-class MyHomePage extends StatefulWidget {
 
-  String titme = '首页';
-
-  MyHomePage({Key key, this.titme}) :super(key: key);
-
+class MyHomePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return new MyHomePageState();
+    return new StateMyHomePage();
   }
+
+
 
 }
 
-class MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
-  GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
-
-  VideoPlayerController videoPlayerController;
+class StateMyHomePage extends State<MyHomePage>{
 
   List<BottomNavigationBarItem> items;
-  int _index = 0;
-  List<Tab> tabs;
-  TabController tabController;
-
-
-  Widget _getButton() {
-    if (_index == 0) {
-      if (dataBean != null) {
-        return new TabBar(
-          tabs: tabs,
-          controller: tabController,
-          isScrollable: true,
-
-        );
-//      }else{
-//        return new Center(
-//          // 可选参数 child:
-//          child: new CircularProgressIndicator(),
-//        );
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-
-
-
-
-
-//  List<ConnotationContentBean.DataBean> contentBean;
-
-//  getConnotationContent(DataBean bean) async {
-//    ConnotationContentBean
-//        .ConnotationContentBean contentBean = await getConnotationTabContent(
-//        bean.url);
-//    setState(() {
-//      this.contentBean = contentBean.data.data;
-//    });
-//  }
-
-  Widget _getTabContentVideo() {
-    if (dataBean == null) {
-      return new Center(
-        // 可选参数 child:
-        child: new CircularProgressIndicator(),
-      );
-    } else {
-      return new Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: new ConnotationVideo(url: dataBean[1].url,),
-      );
-    }
-  }
-  Widget _getTabContentImage() {
-    if (dataBean == null) {
-      return new Center(
-        // 可选参数 child:
-        child: new CircularProgressIndicator(),
-      );
-    } else {
-      return new Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: new ConnotationImage(url: dataBean[2].url,),
-      );
-    }
-  }
-  Widget _getTabContentEssay() {
-    if (dataBean == null) {
-      return new Center(
-        // 可选参数 child:
-        child: new CircularProgressIndicator(),
-      );
-    } else {
-      return new Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: new ConnotationEssay(url: dataBean[3].url,),
-      );
-    }
-  }
-  Widget _getTabContentPersonalShow() {
-    if (dataBean == null) {
-      return new Center(
-        // 可选参数 child:
-        child: new CircularProgressIndicator(),
-      );
-    } else {
-      return new Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: new ConnotationPersonalShow(url: dataBean[4].url,),
-      );
-    }
-  }
-
-  Widget _getTabContentSubscription() {
-    if (dataBean == null) {
-      return new Center(
-        // 可选参数 child:
-        child: new CircularProgressIndicator(),
-      );
-    } else {
-      return new Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: new ConnotationEssay(url: dataBean[4].url,),
-      );
-    }
-  }
-
-
-
-  Widget getImage(ContextBean contextBean) {
-    if (contextBean.middle_image != null &&
-        contextBean.middle_image.url != null) {
-      return new Image.network(
-        '${contextBean.middle_image.url}',
-        width: 20.0,
-        height: 20.0,
-      );
-    } else {
-      return new Image.asset(
-        'asset/images/phone.png',
-        width: 20.0,
-        height: 20.0,
-      );
-    }
-  }
-
-  Widget _getBody() {
-    if (_index == 0) {
-      if (tabController != null) {
-        return new TabBarView(
-
-          controller: tabController,
-          children: <Widget>[
-
-
-
-//            new Text('关注'),
-//            new Text('推荐'),
-//            _getTabContentVideo(),
-//            _getTabContentImage(),
-            new Text('推荐'),
-//            _getTabContentEssay(),
-//            _getTabContentPersonalShow(),
-//            _getTabContentSubscription(),
-            new Text('视频'),
-            new Text('第一个312312'),
-            new Text('第一个12312313'),
-          ]
-
-//
-          ,
-        );
-      } else {
-        return null;
-      }
-    } else if (_index == 1) {
-      return new SingleChildScrollView(
-        child: new Text("as"),
-      );
-    } else {
-      return new Text('第3个');
-    }
-  }
-
-//  getXin() async {
-////    var url = 'http://is.snssdk.com/api/news/feed/v51/?channel=&aid=&app_name=&version_code=&version_name=&device_platform=&ab_version=&ab_client=&ab_group=&ab_feature=&abflag=3&ssmix=a&device_type=&device_brand=&language=zh&os_api=&os_version=&openudid=1b8d5bf69dc4a561&manifest_version_code=&resolution=&dpi=&update_version_code=&_rticket=&category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
-////    print(url);
-////    Response response =await get(url, headers: HEADS);
-////      Map<String,dynamic> map=JSON.decode(response.body);
-////      var news= new News.fromJson(map);
-//    News news = await getXinwen(
-//        context, 'news_hot', '1491981025', '1491981165', '1491981000');
-//    print('请求：' + news.message);
-////    print('${news.data}---}');
-//    setState(() {
-//      this.news = news;
-//    });
-//  }
-
-  List<DataBean> dataBean;
-
-  _getTab() async {
-    ConnotationBean connotationBean = await getConnotationTab();
-    print('请求：' + connotationBean.data[0].name);
-    setState(() {
-      this.dataBean = connotationBean.data;
-    });
-//    tabs = <Tab>[];
-//    for (int i = 0; i < dataBean.length; i++) {
-//      print('${dataBean[i].name}---${dataBean[i].url}');
-//      tabs.add(new Tab(
-//        child: new Tab(text: '${dataBean[i].name}'),
-//      ));
-//    }
-        tabs = <Tab>[
-      new Tab(
-        text: '视频',
-        icon: new Icon(Icons.title),
-      ),
-      new Tab(
-        text: '图片',
-        icon: new Icon(Icons.title),
-      ),
-      new Tab(
-        text: '段子',
-        icon: new Icon(Icons.title),
-      ),
-      new Tab(
-        text: '段友秀',
-        icon: new Icon(Icons.title),
-      ),
-
-    ];
-    tabController = new TabController(length: tabs.length, vsync: this);
-//    getConnotationContent(dataBean[0]);
-  }
-
-  Future<SharedPreferences> preferences = SharedPreferences.getInstance();
-  String username = '';
-
-  _sharedPreferences() async {
-    SharedPreferences sp = await preferences;
-    String name = sp.getString(USERNAME);
-    setState(() {
-      this.username = name ?? '用户名';
-    });
-  }
-
+  int _currentIndex=0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //'category=news_hot&refer=1&count=20&min_behot_time=1491981025&last_refresh_sub_entrance_interval=1491981165&loc_mode=&loc_time=1491981000&latitude=&longitude=&city=&tt_from=pull&lac=&cid=&cp=&iid=0123456789&device_id=12345678952&ac=wifi';
-//    getXin();
-    _getTab();
-    _sharedPreferences();
-    items = <BottomNavigationBarItem>[
-      new BottomNavigationBarItem(
-        icon: new Icon(Icons.videogame_asset),
-        title: new Text('首页'),
-      ),
-      new BottomNavigationBarItem(
-        icon: new Icon(Icons.zoom_out_map),
-        title: new Text('阿二'),
-      ),
-      new BottomNavigationBarItem(
-        icon: new Icon(Icons.tab_unselected),
-        title: new Text('阿三'),
-      ),
+    items=<BottomNavigationBarItem>[
+      new BottomNavigationBarItem(icon: new Icon(Icons.filter_1), title: new Text("第一个")),
+      new BottomNavigationBarItem(icon: new Icon(Icons.filter_2), title: new Text("第二个")),
+      new BottomNavigationBarItem(icon: new Icon(Icons.filter_3), title: new Text("第三个")),
     ];
-
-
-  }
-
-  _hand() {
-    showModalBottomSheet(context: context, builder: (BuildContext context) {
-      return new Container(
-        child: new Column(
-          children: <Widget>[
-            new Text('拍照'),
-            new Divider(),
-            new Text('从本地获取'),
-            new Divider(),
-            new Container(
-              height: 4.0,
-              color: Colors.white,
-            ),
-            new Divider(),
-            new Text('取消'),
-
-          ],
-        ),
-      );
-    });
-    // showModalBottomSheet<T>：显示模态质感设计底部面板
-//    showModalBottomSheet<Null>(context:context, builder:(BuildContext context) {
-//      return new Container(
-//          child: new Padding(
-//              padding: const EdgeInsets.all(32.0),
-//              child: new Text(
-//                  '这是模态底部面板，点击任意位置即可关闭',
-//                  textAlign: TextAlign.center,
-//                  style: new TextStyle(
-//                      color: Theme.of(context).accentColor,
-//                      fontSize: 24.0
-//                  )
-//              )
-//          )
-//      );
-//    });
-
-    //底部永久显示的
-//    key.currentState.showBottomSheet((BuildContext context){
-//      final ThemeData themeData = Theme.of(context);
-//      return new Container(
-//          decoration: new BoxDecoration(
-//              border: new Border(top: new BorderSide(color: themeData.disabledColor))
-//          ),
-//          child: new Padding(
-//              padding: const EdgeInsets.all(32.0),
-//              child: new Text(
-//                  '这是一个持久性的底部面板，向下拖动即可将其关闭',
-//                  textAlign: TextAlign.center,
-//                  style: new TextStyle(
-//                      color: themeData.accentColor,
-//                      fontSize: 24.0
-//                  )
-//              )
-//          )
-//      );
-//    });
-
-//    showBottomSheet(context: context , builder: (BuildContext context){
-//      final ThemeData themeData = Theme.of(context);
-//      return new Container(
-//          decoration: new BoxDecoration(
-//              border: new Border(top: new BorderSide(color: themeData.disabledColor))
-//          ),
-//          child: new Padding(
-//              padding: const EdgeInsets.all(32.0),
-//              child: new Text(
-//                  '这是一个持久性的底部面板，向下拖动即可将其关闭',
-//                  textAlign: TextAlign.center,
-//                  style: new TextStyle(
-//                      color: themeData.accentColor,
-//                      fontSize: 24.0
-//                  )
-//              )
-//          )
-//      );
-//    });
-
-  }
-
-  Widget getHead() {
-    if (username == '用户名') {
-      return new Image.asset('asset/images/head.png',
-        width: 80.0,
-        height: 80.0,
-      );
-    } else {
-      return new Image.network(
-        'https://ws1.sinaimg.cn/large/610dc034ly1fp9qm6nv50j20u00miacg.jpg',
-        width: 80.0,
-        height: 80.0,
-      );
-    }
-  }
-
-  Widget _drawer() {
-    return new Drawer(
-      elevation: 30.0,
-      child: new ListView(
-        children: <Widget>[
-          new Container(
-            child: new Row(
-              children: <Widget>[
-                new Padding(
-                  padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 20.0),
-                  child: new GestureDetector(
-                    onTap: () async {
-                      SharedPreferences sp = await preferences;
-                      String token = sp.getString(SESSION_TOKEN);
-                      String s = null;
-                      if (token != null) {
-                        s =
-                        await getPushNavigator2(context, new MyUserDetails());
-                      } else {
-                        s = await getPushNavigator2(context, new MyLogin());
-                      }
-                      setState(() {
-                        this.username = s ?? '用户名';
-                      });
-                    },
-                    child: getHead(),
-                  ),
-                ),
-                new Text('${username}',
-                  style: new TextStyle(
-                    fontSize: 20.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(Icons.list),
-            title: new Text('第一个'),
-          ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(Icons.list),
-            title: new Text('第2个'),
-          ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(Icons.list),
-            title: new Text('第3个'),
-          ),
-          new Divider(),
-          new ListTile(
-            leading: new Icon(Icons.list),
-            title: new Text('第4个'),
-          ),
-          new Divider(),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    tabController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
     return new Scaffold(
-      key: _key,
       appBar: new AppBar(
-        centerTitle: true,
-        title: new Text('首页'),
-        bottom: _getButton(),
-      ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          _hand();
-        },
-
+        title: new Text("首页"),
       ),
       bottomNavigationBar: new BottomNavigationBar(
-        items: items,
-        currentIndex: _index,
-        onTap: (i) {
-          setState(() {
-            _index = i;
-          });
+          items: items,
+        currentIndex: _currentIndex,
+        onTap: (i){
+            setState(() {
+              this._currentIndex=i;
+            });
         },
       ),
-      drawer: _drawer(),
-
       body: _getBody(),
-
+      drawer: new MyDrawer(),
     );
   }
 
+  Widget _getBody(){
+    return new IndexedStack(
+      index: _currentIndex,
+      children: <Widget>[
+        new Text("diyige"),
+        new Text("dierge"),
+        new Text("disange"),
+      ],
+    );
+  }
 
 }
 
+
+//import 'dart:async';
+//import 'dart:convert';
+//
+//import 'package:flutter/material.dart';
+//import 'package:my_flutter/loader/HttpLoader.dart';
+//import '../person/Login.dart';
+//import 'package:my_flutter/bean/xinwen/NewsBean.dart';
+//import 'package:my_flutter/bean/xinwen/NewsContext.dart';
+//import 'package:http/http.dart';
+//import 'package:my_flutter/loader/HttpConfig.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:my_flutter/config/CodeConfig.dart';
+//import 'package:my_flutter/view/person/UserDetails.dart';
+//import 'package:video_player/video_player.dart';
+//
+//class MyHomePage extends StatefulWidget {
+//
+//  String titme = '首页';
+//
+//  MyHomePage({Key key, this.titme}) :super(key: key);
+//
+//  @override
+//  State<StatefulWidget> createState() {
+//    // TODO: implement createState
+//    return new MyHomePageState();
+//  }
+//
+//}
+//
+//class MyHomePageState extends State<MyHomePage>
+//    with SingleTickerProviderStateMixin {
+//  GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
+//
+//  VideoPlayerController videoPlayerController;
+//
+//  List<BottomNavigationBarItem> items;
+//  int _index = 0;
+//  List<Tab> tabs;
+//  TabController tabController;
+//
+//  @override
+//  void initState() {
+//    // TODO: implement initState
+//    super.initState();
+//    _sharedPreferences();
+//    items = <BottomNavigationBarItem>[
+//      new BottomNavigationBarItem(
+//        icon: new Icon(Icons.videogame_asset),
+//        title: new Text('首页'),
+//      ),
+//      new BottomNavigationBarItem(
+//        icon: new Icon(Icons.zoom_out_map),
+//        title: new Text('阿二'),
+//      ),
+//      new BottomNavigationBarItem(
+//        icon: new Icon(Icons.tab_unselected),
+//        title: new Text('阿三'),
+//      ),
+//    ];
+//
+//
+//  }
+//
+//  @override
+//  void dispose() {
+//    // TODO: implement dispose
+//    tabController.dispose();
+//    super.dispose();
+//  }
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    // TODO: implement build
+//
+//    return new Scaffold(
+//      key: _key,
+//      appBar: new AppBar(
+//        centerTitle: true,
+//        title: new Text('首页'),
+//        bottom: _getButton(),
+//      ),
+//      floatingActionButton: new FloatingActionButton(
+//        onPressed: () {
+//          _hand();
+//        },
+//
+//      ),
+//      bottomNavigationBar: new BottomNavigationBar(
+//        items: items,
+//        currentIndex: _index,
+//        onTap: (i) {
+//          setState(() {
+//            _index = i;
+//          });
+//        },
+//      ),
+//      drawer: _drawer(),
+//
+//      body: _getBody(),
+//
+//    );
+//  }
+//
+//
+//  Widget _getButton() {
+//    if (_index == 0) {
+////      if (dataBean != null) {
+////        return new TabBar(
+////          tabs: tabs,
+////          controller: tabController,
+////          isScrollable: true,
+////
+////        );
+//////      }else{
+//////        return new Center(
+//////          // 可选参数 child:
+//////          child: new CircularProgressIndicator(),
+//////        );
+////      } else {
+////        return null;
+////      }
+//      return null;
+//    } else {
+//      return null;
+//    }
+//  }
+//
+//
+//
+//  Widget getImage(ContextBean contextBean) {
+//    if (contextBean.middle_image != null &&
+//        contextBean.middle_image.url != null) {
+//      return new Image.network(
+//        '${contextBean.middle_image.url}',
+//        width: 20.0,
+//        height: 20.0,
+//      );
+//    } else {
+//      return new Image.asset(
+//        'asset/images/phone.png',
+//        width: 20.0,
+//        height: 20.0,
+//      );
+//    }
+//  }
+//
+//  Widget _getBody() {
+//    if (_index == 0) {
+//      if (tabController != null) {
+//        return new TabBarView(
+//
+//          controller: tabController,
+//          children: <Widget>[
+//            new Text('推荐'),
+//            new Text('视频'),
+//            new Text('第一个312312'),
+//            new Text('第一个12312313'),
+//          ]
+//        );
+//      } else {
+//        return null;
+//      }
+//    } else if (_index == 1) {
+//      return new SingleChildScrollView(
+//        child: new Text("as"),
+//      );
+//    } else {
+//      return new Text('第3个');
+//    }
+//  }
+//
+//
+//
+//
+//  Future<SharedPreferences> preferences = SharedPreferences.getInstance();
+//  String username = '';
+//
+//  _sharedPreferences() async {
+//    SharedPreferences sp = await preferences;
+//    String name = sp.getString(USERNAME);
+//    setState(() {
+//      this.username = name ?? '用户名';
+//    });
+//  }
+//
+//
+//
+//  _hand() {
+//    showModalBottomSheet(context: context, builder: (BuildContext context) {
+//      return new Container(
+//        child: new Column(
+//          children: <Widget>[
+//            new Text('拍照'),
+//            new Divider(),
+//            new Text('从本地获取'),
+//            new Divider(),
+//            new Container(
+//              height: 4.0,
+//              color: Colors.white,
+//            ),
+//            new Divider(),
+//            new Text('取消'),
+//
+//          ],
+//        ),
+//      );
+//    });
+//    // showModalBottomSheet<T>：显示模态质感设计底部面板
+////    showModalBottomSheet<Null>(context:context, builder:(BuildContext context) {
+////      return new Container(
+////          child: new Padding(
+////              padding: const EdgeInsets.all(32.0),
+////              child: new Text(
+////                  '这是模态底部面板，点击任意位置即可关闭',
+////                  textAlign: TextAlign.center,
+////                  style: new TextStyle(
+////                      color: Theme.of(context).accentColor,
+////                      fontSize: 24.0
+////                  )
+////              )
+////          )
+////      );
+////    });
+//
+//    //底部永久显示的
+////    key.currentState.showBottomSheet((BuildContext context){
+////      final ThemeData themeData = Theme.of(context);
+////      return new Container(
+////          decoration: new BoxDecoration(
+////              border: new Border(top: new BorderSide(color: themeData.disabledColor))
+////          ),
+////          child: new Padding(
+////              padding: const EdgeInsets.all(32.0),
+////              child: new Text(
+////                  '这是一个持久性的底部面板，向下拖动即可将其关闭',
+////                  textAlign: TextAlign.center,
+////                  style: new TextStyle(
+////                      color: themeData.accentColor,
+////                      fontSize: 24.0
+////                  )
+////              )
+////          )
+////      );
+////    });
+//
+////    showBottomSheet(context: context , builder: (BuildContext context){
+////      final ThemeData themeData = Theme.of(context);
+////      return new Container(
+////          decoration: new BoxDecoration(
+////              border: new Border(top: new BorderSide(color: themeData.disabledColor))
+////          ),
+////          child: new Padding(
+////              padding: const EdgeInsets.all(32.0),
+////              child: new Text(
+////                  '这是一个持久性的底部面板，向下拖动即可将其关闭',
+////                  textAlign: TextAlign.center,
+////                  style: new TextStyle(
+////                      color: themeData.accentColor,
+////                      fontSize: 24.0
+////                  )
+////              )
+////          )
+////      );
+////    });
+//
+//  }
+//
+//  Widget getHead() {
+//    if (username == '用户名') {
+//      return new Image.asset('asset/images/head.png',
+//        width: 80.0,
+//        height: 80.0,
+//      );
+//    } else {
+//      return new Image.network(
+//        'https://ws1.sinaimg.cn/large/610dc034ly1fp9qm6nv50j20u00miacg.jpg',
+//        width: 80.0,
+//        height: 80.0,
+//      );
+//    }
+//  }
+//
+//  Widget _drawer() {
+//    return new Drawer(
+//      elevation: 30.0,
+//      child: new ListView(
+//        children: <Widget>[
+//          new Container(
+//            child: new Row(
+//              children: <Widget>[
+//                new Padding(
+//                  padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 20.0),
+//                  child: new GestureDetector(
+//                    onTap: () async {
+//                      SharedPreferences sp = await preferences;
+//                      String token = sp.getString(SESSION_TOKEN);
+//                      String s = null;
+//                      if (token != null) {
+//                        s =
+//                        await getPushNavigator2(context, new MyUserDetails());
+//                      } else {
+//                        s = await getPushNavigator2(context, new MyLogin());
+//                      }
+//                      setState(() {
+//                        this.username = s ?? '用户名';
+//                      });
+//                    },
+//                    child: getHead(),
+//                  ),
+//                ),
+//                new Text('${username}',
+//                  style: new TextStyle(
+//                    fontSize: 20.0,
+//                  ),
+//                ),
+//              ],
+//            ),
+//          ),
+//          new Divider(),
+//          new ListTile(
+//            leading: new Icon(Icons.list),
+//            title: new Text('第一个'),
+//          ),
+//          new Divider(),
+//          new ListTile(
+//            leading: new Icon(Icons.list),
+//            title: new Text('第2个'),
+//          ),
+//          new Divider(),
+//          new ListTile(
+//            leading: new Icon(Icons.list),
+//            title: new Text('第3个'),
+//          ),
+//          new Divider(),
+//          new ListTile(
+//            leading: new Icon(Icons.list),
+//            title: new Text('第4个'),
+//          ),
+//          new Divider(),
+//        ],
+//      ),
+//    );
+//  }
+//
+//
+//
+//}
+//

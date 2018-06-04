@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter/services.dart';
-import 'package:my_flutter/loader/HttpConfig.dart';
+import 'package:my_flutter/http/HttpConfig.dart';
 import 'dart:convert';
 import '../home/HomePage.dart';
 

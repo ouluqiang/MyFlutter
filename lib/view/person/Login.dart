@@ -2,15 +2,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter/services.dart';
-import 'package:my_flutter/loader/HttpConfig.dart';
+import 'package:my_flutter/http/HttpConfig.dart';
 import 'dart:convert';
 import '../home/HomePage.dart';
 import 'Register.dart';
 import 'ForgetPassword.dart';
 import 'dart:math';
-import 'package:my_flutter/config/CodeConfig.dart';
-import 'package:my_flutter/loader/HttpLoader.dart';
+import 'package:my_flutter/config/MethodConfig.dart';
+import 'package:my_flutter/http/loader/HttpLoader.dart';
 import 'package:my_flutter/bean/user/BaseBean.dart';
+import 'package:my_flutter/config/NavigatorConfig.dart';
 
 class MyLogin extends StatefulWidget {
   @override
