@@ -54,7 +54,8 @@ class StateMyDrawer extends State<MyDrawer> {
                     onTap: () async {
                       SharedPreferences sp = await SpConfig.preferences;
                       String token = sp.getString(SpConfig.SESSION_TOKEN);
-                      String s = null;
+                      String s = '';
+                      NavigatorConfig.getPopNavigator(context);
                       if (token != null) {
                         s = await NavigatorConfig.getPushNavigatorString(
                             context, new MyUserDetails());
@@ -63,7 +64,7 @@ class StateMyDrawer extends State<MyDrawer> {
                             context, new MyLogin());
 
                       }
-                      NavigatorConfig.getPopNavigator(context);
+
                       setState(() {
                         this.username = s ?? '用户名';
                       });

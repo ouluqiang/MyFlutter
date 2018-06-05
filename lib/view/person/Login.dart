@@ -43,7 +43,11 @@ class MyLoginState extends State<MyLogin> {
 
   _handLogin() async {
     if (_phone.isEmpty) {
-      MethodConfig.handToast(CodeConfig.EMAIL_NULL_NOT);
+      MethodConfig. handToast(CodeConfig.EMAIL_NULL_NOT);
+      return;
+    }
+    if (RegExpConfig.getEmail(_phone)) {
+      MethodConfig.  handToast(CodeConfig.EMAIL_ERROR);
       return;
     }
     if (_password.isEmpty) {
@@ -173,21 +177,21 @@ class MyLoginState extends State<MyLogin> {
                   },
                 ),
               ),
-//              new Flexible(
-//                child: new Padding(
-//                    padding: const EdgeInsets.fromLTRB(0.0, 14.0, 20.0, 14.0),
-//                    child: new Align(
-//                      alignment: Alignment.centerRight,
-//                      child: new GestureDetector(
-//                        child: new Text('忘记密码?'),
-//                        onTap: () {
-//                          print('忘记密码');
-//                          getPushNavigator(context, new MyForgetPassword());
-//                        },
-//                      ),
-//                    )
-//                ),
-//              ),
+              new Flexible(
+                child: new Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 14.0, 20.0, 14.0),
+                    child: new Align(
+                      alignment: Alignment.centerRight,
+                      child: new GestureDetector(
+                        child: new Text('忘记密码?'),
+                        onTap: () {
+                          print('忘记密码');
+                          NavigatorConfig.getPushNavigator(context, new MyForgetPassword());
+                        },
+                      ),
+                    )
+                ),
+              ),
 
 
             ],

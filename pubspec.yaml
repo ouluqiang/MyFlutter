@@ -19,6 +19,8 @@ dependencies:
   shared_preferences: ^0.4.0
   #视频插件
   video_player: "^0.3.0"
+  #拍照从图片选
+  image_picker: ^0.4.4
 
 dev_dependencies:
   flutter_test:

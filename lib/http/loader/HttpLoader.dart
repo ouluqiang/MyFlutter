@@ -169,6 +169,47 @@ class HttpLoader{
     return baseBean.code;
   }
 
+
+  /**
+   * 邮箱找回密码
+   */
+  static Future<int> getRequestPasswordReset(BuildContext context, String email) async {
+    getLoad(context);
+    var url = HttpBase.REQUEST_PASSWORD_RESET;
+    Map map={'email':email};
+    var body=JSON.encode(map);
+    Response response = await post(url, body: body,headers: HttpBase.HEADS);
+    Map<String,dynamic> s=JSON.decode(response.body);
+    var baseBean=new BaseBean.fromJson(s);
+    print('修改:${baseBean.code}');
+    if(baseBean.code!=null&&baseBean.error!=null){
+      NavigatorConfig.getPopNavigator(context);
+      MethodConfig.handToast(baseBean.error);
+    }else{
+      NavigatorConfig.getPopNavigator(context);
+      showDialog<Null>(
+        context: context,
+        child: new AlertDialog(
+          title: new Text('邮件已发送，请重置密码'),
+          actions: <Widget>[
+            new FlatButton(
+                onPressed: () {
+                  NavigatorConfig.getPopNavigator(context);
+                  NavigatorConfig.getPopNavigator(context);
+                },
+                child: new Text('确定')
+            ),
+//            new FlatButton(onPressed: (){
+//              Navigator.pop(context);
+//            }, child: new Text('取消'))
+          ],
+        )
+    );
+    }
+    return baseBean.code;
+  }
+
+
 }
 
 
