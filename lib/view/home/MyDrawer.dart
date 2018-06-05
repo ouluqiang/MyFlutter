@@ -7,18 +7,15 @@ import 'package:my_flutter/config/NavigatorConfig.dart';
 import 'package:my_flutter/view/person/UserDetails.dart';
 import 'package:my_flutter/view/person/Login.dart';
 
-
-class MyDrawer extends StatefulWidget{
+class MyDrawer extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return new StateMyDrawer();
   }
-
 }
 
-class StateMyDrawer extends State<MyDrawer>{
-
+class StateMyDrawer extends State<MyDrawer> {
   String username = '';
 
   @override
@@ -33,7 +30,6 @@ class StateMyDrawer extends State<MyDrawer>{
     // TODO: implement build
     return _getDrawer();
   }
-
 
 //
   _sharedPreferences() async {
@@ -60,11 +56,14 @@ class StateMyDrawer extends State<MyDrawer>{
                       String token = sp.getString(SpConfig.SESSION_TOKEN);
                       String s = null;
                       if (token != null) {
-                        s =
-                        await getPushNavigatorString(context, new MyUserDetails());
+                        s = await NavigatorConfig.getPushNavigatorString(
+                            context, new MyUserDetails());
                       } else {
-                        s = await getPushNavigatorString(context, new MyLogin());
+                        s = await NavigatorConfig.getPushNavigatorString(
+                            context, new MyLogin());
+
                       }
+                      NavigatorConfig.getPopNavigator(context);
                       setState(() {
                         this.username = s ?? '用户名';
                       });
@@ -72,7 +71,8 @@ class StateMyDrawer extends State<MyDrawer>{
                     child: getHead(),
                   ),
                 ),
-                new Text('${username}',
+                new Text(
+                  '${username}',
                   style: new TextStyle(
                     fontSize: 20.0,
                   ),
@@ -101,6 +101,19 @@ class StateMyDrawer extends State<MyDrawer>{
             title: new Text('第4个'),
           ),
           new Divider(),
+//          new Container(
+//            margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+//            alignment: Alignment.center,
+//            child: new RaisedButton(
+//              child: new Text('退出登录'),
+//                onPressed: () async {
+//                  SharedPreferences sp = await SpConfig.preferences;
+//                  bool isClear=await sp.clear();
+//                  if(isClear){
+//                    _sharedPreferences();
+//                  }
+//                }),
+//          ),
         ],
       ),
     );
@@ -108,18 +121,19 @@ class StateMyDrawer extends State<MyDrawer>{
 
   Widget getHead() {
     if (username == '用户名') {
-      return new Image.asset('asset/images/head.png',
-        width: 80.0,
-        height: 80.0,
+      return new CircleAvatar(
+        radius: 40.0,
+        backgroundImage: new AssetImage('asset/images/head.png'),
+        foregroundColor: Colors.red,
       );
     } else {
-      return new Image.network(
-        'https://ws1.sinaimg.cn/large/610dc034ly1fp9qm6nv50j20u00miacg.jpg',
-        width: 80.0,
-        height: 80.0,
+      return new CircleAvatar(
+        radius: 40.0,
+        foregroundColor: Colors.red,
+        backgroundImage: new NetworkImage(
+          'https://ws1.sinaimg.cn/large/610dc034ly1fp9qm6nv50j20u00miacg.jpg',
+        ),
       );
     }
   }
-
 }
-

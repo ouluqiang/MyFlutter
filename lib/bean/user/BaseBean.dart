@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'package:my_flutter/bean/user/BaseBean.g.dart';
 
 /**
+ *      更新bean类
  *          flutter packages pub run build_runner build
  */
 

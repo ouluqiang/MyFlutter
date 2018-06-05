@@ -7,5 +7,6 @@ class SpConfig{
  static final SESSION_TOKEN='sessionToken';
  static final USERNAME='username';
  static final OBJECT_ID='objectId';
+ static final EMAIL='email';
 
 }

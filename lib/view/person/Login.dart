@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter/services.dart';
+import 'package:my_flutter/config/CodeConfig.dart';
+import 'package:my_flutter/config/RegExpConfig.dart';
 import 'package:my_flutter/http/HttpConfig.dart';
 import 'dart:convert';
 import '../home/HomePage.dart';
@@ -41,18 +43,18 @@ class MyLoginState extends State<MyLogin> {
 
   _handLogin() async {
     if (_phone.isEmpty) {
-      handToast(USERNAME_NULL_NOT);
+      MethodConfig.handToast(CodeConfig.EMAIL_NULL_NOT);
       return;
     }
     if (_password.isEmpty) {
-      handToast(PASSWORD_NULL_NOT);
+      MethodConfig. handToast(CodeConfig.PASSWORD_NULL_NOT);
       return;
     }
     if (_password.length<6) {
-      handToast(PASSWORD_LENGTH_NOT);
+      MethodConfig.handToast(CodeConfig.PASSWORD_LENGTH_NOT);
       return;
     }
-    int code=await getLogin(context, _phone, _password);
+    int code=await HttpLoader.getLogin(context, _phone, _password);
 
 
   }
@@ -99,11 +101,11 @@ class MyLoginState extends State<MyLogin> {
 
                       decoration: new InputDecoration(
 //                            border: InputBorder.none,  //隐藏下滑线
-                        hintText: '请输入账号',
-                        labelText: '账号',
+                        hintText: '请输入用户名/邮箱',
+                        labelText: '用户名/邮箱',
 
                       ),
-                      maxLength: 11,
+                      maxLength: 20,
                       maxLines: 1,
                       style: textStyle
                       ,
@@ -167,7 +169,7 @@ class MyLoginState extends State<MyLogin> {
                   ),
                   onTap: () {
                     print('注册');
-                    getPushNavigator(context, new MyRegister());
+                    NavigatorConfig.getPushNavigator(context, new MyRegister());
                   },
                 ),
               ),

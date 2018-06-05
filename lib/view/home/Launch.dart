@@ -25,7 +25,7 @@ class MyLaunchState extends State<MyLaunch> {
 
   _getToken() async{
     SharedPreferences sp= await SharedPreferences.getInstance();
-    String msg=await getCheckSession(context);
+    String msg=await HttpLoader.getCheckSession(context);
     if(msg.isNotEmpty){
       if(msg=='fail'){
         sp.clear();
@@ -52,7 +52,7 @@ class MyLaunchState extends State<MyLaunch> {
   }
 
   void _handNavigator(){
-    getPushReplacementNavigator(context, new MyHomePage());
+    NavigatorConfig.getPushReplacementNavigator(context, new MyHomePage());
   }
 
 //  _handNavigator(){

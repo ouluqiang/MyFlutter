@@ -8,6 +8,8 @@ import '../home/HomePage.dart';
 import 'package:my_flutter/config/MethodConfig.dart';
 import 'package:my_flutter/http/loader/HttpLoader.dart';
 import 'package:my_flutter/bean/user/BaseBean.dart';
+import 'package:my_flutter/config/RegExpConfig.dart';
+import 'package:my_flutter/config/CodeConfig.dart';
 
 class MyRegister extends StatefulWidget {
   @override
@@ -21,51 +23,61 @@ class MyRegister extends StatefulWidget {
 
 class MyRegisterState extends State<MyRegister> {
 
-  TextEditingController controller=new TextEditingController();
+//  TextEditingController controller=new TextEditingController();
 //  TextEditingController controller2=new TextEditingController();
 //  TextEditingController controller3=new TextEditingController();
 
-  String _phone;
-  String _password;
-  String _passwordNew;
+  String _email='';
+  String _nickname='';
+  String _password='';
+  String _passwordNew='';
 
   _handRegister() async {
-    if (_phone.isEmpty) {
-      handToast(USERNAME_NULL_NOT);
+    if (_email.isEmpty) {
+      MethodConfig. handToast(CodeConfig.EMAIL_NULL_NOT);
+      return;
+    }
+    if (RegExpConfig.getEmail(_email)) {
+      MethodConfig.  handToast(CodeConfig.EMAIL_ERROR);
+      return;
+    }
+
+    if (_nickname.isEmpty) {
+      MethodConfig.  handToast(CodeConfig.NICKNAME_NULL_NOT);
       return;
     }
     if (_password.isEmpty) {
-      handToast(PASSWORD_NULL_NOT);
+      MethodConfig. handToast(CodeConfig.PASSWORD_NULL_NOT);
       return;
     }
     if (_password.length<6) {
-      handToast(PASSWORD_LENGTH_NOT);
+      MethodConfig. handToast(CodeConfig.PASSWORD_LENGTH_NOT);
       return;
     }
     if (_passwordNew.isEmpty) {
-      handToast(PASSWORD_NULL_NOT);
+      MethodConfig. handToast(CodeConfig.PASSWORD_NULL_NOT);
       return;
     }
     if (_passwordNew.length<6) {
-      handToast(PASSWORD_LENGTH_NOT);
+      MethodConfig. handToast(CodeConfig.PASSWORD_LENGTH_NOT);
       return;
     }
     if (_password!=_passwordNew) {
-      handToast(PASSWORD_EQUALS_NOT);
+      MethodConfig. handToast(CodeConfig.PASSWORD_EQUALS_NOT);
       return;
     }
 
-    int code=await getRegister(context, _phone, _password);
-    if(code!=null){
-      controller.clear();
-    }
+    int code=await HttpLoader.getRegister(context, _email,_nickname, _password);
+//    if(code!=null){
+//      controller.clear();
+//    }
 
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    controller.dispose();
+//    controller.dispose();
     super.dispose();
   }
 
@@ -85,6 +97,7 @@ class MyRegisterState extends State<MyRegister> {
 
       body: new ListView(
         children: <Widget>[
+
           new Container(
             margin: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 20.0),
             alignment: Alignment.center,
@@ -104,18 +117,55 @@ class MyRegisterState extends State<MyRegister> {
                   child: new Padding(
                     padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
                     child: new TextField( //输入框控件
-                      controller: controller,
+//                      controller: controller,
                       onChanged: (str) {
-                        _phone = str;
+                        _email = str;
                       },
 
                       decoration: new InputDecoration(
 //                            border: InputBorder.none,  //隐藏下滑线
-                        hintText: '请输入账号',
-                        labelText: '账号',
+                        hintText: '请输入邮箱',
+                        labelText: '邮箱将作为登录账户',
 
                       ),
-                      maxLength: 11,
+                      maxLength: 20,
+                      maxLines: 1,
+                      style: textStyle
+                      ,
+                    ),
+                  ),
+
+
+                ),
+
+              ],
+            ),
+          ),
+          new Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+            child: new Row(
+              children: <Widget>[
+                new Image.asset(
+                  'asset/images/phone.png',
+                  width: 22.0,
+                  fit: BoxFit.fill,
+                  alignment: Alignment.bottomCenter,),
+                new Flexible(
+                  child: new Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
+                    child: new TextField( //输入框控件
+//                      controller: controller,
+                      onChanged: (str) {
+                        _nickname = str;
+                      },
+
+                      decoration: new InputDecoration(
+//                            border: InputBorder.none,  //隐藏下滑线
+                        hintText: '请输入用户名',
+                        labelText: '用户名',
+
+                      ),
+                      maxLength: 10,
                       maxLines: 1,
                       style: textStyle
                       ,

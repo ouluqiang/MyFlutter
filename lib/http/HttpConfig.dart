@@ -13,7 +13,7 @@ class HttpBase{
 
   static final TOKEN_KEY='X-Bmob-Session-Token';
 
-  static final Map HEADS={APPID_KEY:APPID_VALUE,API_KEY:API_VALUE,TYPE_KEY:TYPE_VALUE};
+  static final Map<String,String> HEADS={APPID_KEY:APPID_VALUE,API_KEY:API_VALUE,TYPE_KEY:TYPE_VALUE};
 
 
   static final URL='https://api.bmob.cn/';
@@ -23,7 +23,8 @@ class HttpBase{
   static final LOGIN=URL_CODE+'login';//登录
   static  final USERS=URL_CODE+'users';//注册
   static  final CHECK_SESSION=URL_CODE+'checkSession/';//判断token是否过期
-
+  static  final REQUEST_EMAIL_VERIFY=URL_CODE+'requestEmailVerify/';//验证邮箱
+  static  final UPDATE_USER_PASSWORD=URL_CODE+'updateUserPassword/';//修改密码
 
 
 
