@@ -17,15 +17,17 @@ class HttpBase{
 
 
   static final URL='https://api.bmob.cn/';
+
+  static  final FILES=URL+'2/files/';//文件
+
   static final URL_CODE=URL+'1/';
-
-
   static final LOGIN=URL_CODE+'login';//登录
   static  final USERS=URL_CODE+'users';//注册
   static  final CHECK_SESSION=URL_CODE+'checkSession/';//判断token是否过期
   static  final REQUEST_EMAIL_VERIFY=URL_CODE+'requestEmailVerify/';//验证邮箱
   static  final UPDATE_USER_PASSWORD=URL_CODE+'updateUserPassword/';//修改密码
   static  final REQUEST_PASSWORD_RESET=URL_CODE+'requestPasswordReset/';//邮箱重置密码
+
 
 
 

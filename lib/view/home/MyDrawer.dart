@@ -64,7 +64,9 @@ class StateMyDrawer extends State<MyDrawer> {
                             context, new MyLogin());
 
                       }
-
+                      if(s==null){
+                        return;
+                      }
                       setState(() {
                         this.username = s ?? '用户名';
                       });

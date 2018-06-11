@@ -160,7 +160,7 @@ class MyUserDetailsState extends State<MyUserDetails> {
                 new GestureDetector(
                   child: _getItem('拍照'),
                   onTap: (){
-                    _getPickImage(true);
+                    _getPickImage(ImageSource.camera);
                   },
                 ),
 //                new Container(
@@ -174,7 +174,7 @@ class MyUserDetailsState extends State<MyUserDetails> {
                 new GestureDetector(
                   child: _getItem('从本地获取'),
                   onTap: (){
-                    _getPickImage(false);
+                    _getPickImage(ImageSource.gallery);
                   },
                 ),
 
@@ -282,13 +282,8 @@ class MyUserDetailsState extends State<MyUserDetails> {
     return new Divider(height: 1.0,);
   }
 
-  _getPickImage(bool isCamera)async {
-    var image;
-    if(isCamera){
-       image = await ImagePicker.pickImage(source: ImageSource.camera);
-    }else{
-       image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    }
+  _getPickImage(ImageSource source)async {
+    File image = await ImagePicker.pickImage(source: source);
     NavigatorConfig.getPopNavigator(context);
     print('图片：'+image.toString());
     setState(() {
