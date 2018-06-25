@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_flutter/config/NavigatorConfig.dart';
 import 'package:my_flutter/config/AppConfig.dart';
@@ -9,6 +11,9 @@ import 'package:my_flutter/config/PreferencesConfig.dart';
 import 'package:my_flutter/config/NavigatorConfig.dart';
 import 'UpdatePassword.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_flutter/http/loader/HttpLoader.dart';
+
+
 
 class MyUserDetails extends StatefulWidget {
   @override
@@ -95,12 +100,12 @@ class MyUserDetailsState extends State<MyUserDetails> {
     String name = sp.get(SpConfig.USERNAME);
     String email = sp.get(SpConfig.EMAIL);
     String startEmail = email.substring(0, email.lastIndexOf('@') - 1);
-    String EndEmail = email.substring(email.lastIndexOf('@') - 1, email.length);
+    String endEmail = email.substring(email.lastIndexOf('@') - 1, email.length);
     String e = startEmail.replaceAll(startEmail, '********');
-    print(startEmail + '-----' + e + '---' + EndEmail);
+    print(startEmail + '-----' + e + '---' + endEmail);
     setState(() {
       this.username = name ?? '用户名';
-      this.email = e + EndEmail ?? '';
+      this.email = e + endEmail ?? '';
     });
   }
 
@@ -138,14 +143,29 @@ class MyUserDetailsState extends State<MyUserDetails> {
       onTap: () {
         _handShowModalBottom();
       },
-      child: new CircleAvatar(
+      child: getImageHead()
+
+    );
+  }
+
+  Widget getImageHead(){
+    if(_image==null){
+      return new CircleAvatar(
+          radius: 40.0,
+          foregroundColor: Colors.red,
+          backgroundImage: new NetworkImage(
+            'https://ws1.sinaimg.cn/large/610dc034ly1fp9qm6nv50j20u00miacg.jpg',
+          )
+      );
+    }else{
+      return new CircleAvatar(
         radius: 40.0,
         foregroundColor: Colors.red,
-        backgroundImage: new NetworkImage(
-          'https://ws1.sinaimg.cn/large/610dc034ly1fp9qm6nv50j20u00miacg.jpg',
-        ),
-      ),
-    );
+        backgroundImage: new FileImage(_image)
+      );
+
+    }
+
   }
 
   _handShowModalBottom() {
@@ -286,9 +306,23 @@ class MyUserDetailsState extends State<MyUserDetails> {
     File image = await ImagePicker.pickImage(source: source);
     NavigatorConfig.getPopNavigator(context);
     print('图片：'+image.toString());
+    HttpLoader.getFiles(context, image.toString());
+//    ui.Image image = await boundary.toImage();
+    // 注意：png是压缩后格式，如果需要图片的原始像素数据，请使用rawRgba
     setState(() {
       _image = image;
     });
   }
+
+  //// 截图boundary，并且返回图片的二进制数据。
+//  Future<Uint8List> _capturePng() async {
+//    GlobalKey globalKey = new GlobalKey();
+//    RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+//    ui.Image image = await boundary.toImage();
+//    // 注意：png是压缩后格式，如果需要图片的原始像素数据，请使用rawRgba
+//    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+//    Uint8List pngBytes = byteData.buffer.asUint8List();
+//    return pngBytes;
+//  }
 
 }

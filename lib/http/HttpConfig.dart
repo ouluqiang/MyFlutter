@@ -29,6 +29,15 @@ class HttpBase{
   static  final REQUEST_PASSWORD_RESET=URL_CODE+'requestPasswordReset/';//邮箱重置密码
 
 
+  static Map<String,String> getHeads(String value){
+    String type='';
+    if(value=='png'){
+      type='image/png';
+    }else{
+      type='image/jpeg';
+    }
+    return {APPID_KEY:APPID_VALUE,API_KEY:API_VALUE,TYPE_KEY:type};
+  }
 
 
 }

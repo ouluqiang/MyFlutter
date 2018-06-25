@@ -1,18 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:http/http.dart';
 import 'package:my_flutter/config/CodeConfig.dart';
-import 'package:my_flutter/config/RegExpConfig.dart';
 import 'package:my_flutter/http/HttpConfig.dart';
-import 'package:my_flutter/view/home/HomePage.dart';
 import 'package:my_flutter/bean/user/BaseBean.dart';
-import 'package:my_flutter/bean/xinwen/NewsBean.dart';
 import 'package:my_flutter/config/MethodConfig.dart';
 import 'package:my_flutter/bean/user/UserBean.dart';
 import 'package:my_flutter/config/PreferencesConfig.dart';
 import 'package:my_flutter/config/NavigatorConfig.dart';
-import 'package:my_flutter/config/PreferencesConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpLoader{
@@ -205,6 +202,33 @@ class HttpLoader{
           ],
         )
     );
+    }
+    return baseBean.code;
+  }
+
+  /**
+   * 上传文件
+   * {"cdn":"upyun","filename":"632521056@qq.com1528970733030.jpg'","url":"http://bmob-cdn-19977.b0.upaiyun.com/2018/06/14/395e02df40f2c3a280b3caa3f084c8f6.jpg'"}
+   */
+  static Future<int> getFiles(BuildContext context, String fileName) async {
+    getLoad(context);
+    SharedPreferences sp=await SpConfig.preferences;
+    String emain=sp.getString(SpConfig.EMAIL);
+    Map map={'data-binary':fileName};
+    var body=JSON.encode(map);
+    String value=fileName.substring(fileName.lastIndexOf('.')+1,fileName.length);
+    int currentTime=new DateTime.now().millisecondsSinceEpoch;
+    var url = HttpBase.FILES+emain+currentTime.toString()+'.'+value;
+    Response response = await post(url, body: body,headers: HttpBase.getHeads(value));
+    print('tu:'+response.body);
+    Map<String,dynamic> s=JSON.decode(response.body);
+    var baseBean=new BaseBean.fromJson(s);
+    print('修改:${baseBean.code}');
+    if(baseBean.code!=null&&baseBean.error!=null){
+      NavigatorConfig.getPopNavigator(context);
+      MethodConfig.handToast(baseBean.error);
+    }else{
+      NavigatorConfig.getPopNavigator(context);
     }
     return baseBean.code;
   }

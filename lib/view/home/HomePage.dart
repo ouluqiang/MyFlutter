@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter/view/home/MyDrawer.dart';
+import 'One.dart';
 
 
 class MyHomePage extends StatefulWidget{
@@ -54,7 +55,7 @@ class StateMyHomePage extends State<MyHomePage>{
     return new IndexedStack(
       index: _currentIndex,
       children: <Widget>[
-        new Text("diyige"),
+        new One(),
         new Text("dierge"),
         new Text("disange"),
       ],

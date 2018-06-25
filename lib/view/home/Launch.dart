@@ -26,7 +26,7 @@ class MyLaunchState extends State<MyLaunch> {
   _getToken() async{
     SharedPreferences sp= await SharedPreferences.getInstance();
     String msg=await HttpLoader.getCheckSession(context);
-    if(msg.isNotEmpty){
+    if(msg!=null&&msg.isNotEmpty){
       if(msg=='fail'){
         sp.clear();
       }
