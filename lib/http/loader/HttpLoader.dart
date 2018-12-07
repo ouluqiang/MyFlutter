@@ -57,7 +57,7 @@ class HttpLoader{
 //      Map<String,dynamic> s=JSON.decode(response.body);
       var userBean=new UserBean.fromJson(s);
       NavigatorConfig.getPopNavigator(context);
-      if(userBean.emailVerified){
+      if(userBean.emailVerified!=null&&userBean.emailVerified){
         SharedPreferences sp=await SpConfig.preferences;
         sp.setString(SpConfig.SESSION_TOKEN, userBean.sessionToken);
         sp.setString(SpConfig.USERNAME, userBean.username);
