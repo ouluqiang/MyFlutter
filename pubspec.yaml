@@ -11,10 +11,15 @@ dependencies:
 
   english_words: ^3.1.0
 
+  http: ^0.12.0
+
+  build_runner: ^1.1.2
   #文件读写
-  path_provider: ^0.2.1+1
+  path_provider: ^0.4.1
   #json解析
-  json_annotation: ^0.2.2
+  json_annotation: ^2.0.0
+  #json解析
+  json_serializable: ^2.0.0
   #数据存储
   shared_preferences: ^0.4.0
   #视频插件
@@ -28,9 +33,9 @@ dev_dependencies:
     sdk: flutter
 
 
-  build_runner: ^0.7.6
+#  build_runner: ^0.7.6
   #json解析
-  json_serializable: ^0.4.0
+#  json_serializable: ^2.0.0
 
 #  source_gen:
 # For information on the generic Dart part of this file, see the

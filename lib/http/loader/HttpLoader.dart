@@ -47,7 +47,7 @@ class HttpLoader{
       NavigatorConfig.getPopNavigator(context);
       MethodConfig.handToast(CodeConfig.TIMEOUT);
     });
-    Map<String,dynamic> s=JSON.decode(response.body);
+    Map<String,dynamic> s=json.decode(response.body);
     var baseBean=new BaseBean.fromJson(s);
     print('登录:${response.body}');
     if(baseBean.code!=null&&baseBean.error!=null){
@@ -84,7 +84,7 @@ class HttpLoader{
       var url = HttpBase.CHECK_SESSION + objectId;
       HttpBase.HEADS.addAll({HttpBase.TOKEN_KEY:token});
       Response response = await get(url, headers: HttpBase.HEADS);
-      Map<String, dynamic> map = JSON.decode(response.body);
+      Map<String, dynamic> map = json.decode(response.body);
       print(response.body);
       String msg=map['msg'];
       return msg;
@@ -99,9 +99,9 @@ class HttpLoader{
     getLoad(context);
     var url = HttpBase.USERS;
     Map map={'email':email,'username':nickname,'password':password};
-    var body=JSON.encode(map);
+    var body=json.encode(map);
     Response response = await post(url, body: body,headers: HttpBase.HEADS);
-    Map<String,dynamic> s=JSON.decode(response.body);
+    Map<String,dynamic> s=json.decode(response.body);
     var baseBean=new BaseBean.fromJson(s);
     print('注册:${baseBean.code}');
     if(baseBean.code!=null&&baseBean.error!=null){
@@ -122,9 +122,9 @@ class HttpLoader{
 //    getLoad(context);
     var url = HttpBase.REQUEST_EMAIL_VERIFY;
     Map map={'email':email};
-    var body=JSON.encode(map);
+    var body=json.encode(map);
     Response response = await post(url, body: body,headers: HttpBase.HEADS);
-    Map<String,dynamic> s=JSON.decode(response.body);
+    Map<String,dynamic> s=json.decode(response.body);
     var baseBean=new BaseBean.fromJson(s);
     print('邮件:${baseBean.code}   ${baseBean.error}');
 //    if(baseBean.code!=null&&baseBean.error!=null){
@@ -146,24 +146,25 @@ class HttpLoader{
     String objectId=sp.getString(SpConfig.OBJECT_ID);
     if(objectId.isEmpty){
       NavigatorConfig.getPopNavigator(context);
-      return;
+
+    }else {
+      var url = HttpBase.UPDATE_USER_PASSWORD + objectId;
+      Map map = {'oldPassword': oldPassword, 'newPassword': newPassword};
+      var body = json.encode(map);
+      Response response = await post(url, body: body, headers: HttpBase.HEADS);
+      Map<String, dynamic> s = json.decode(response.body);
+      var baseBean = new BaseBean.fromJson(s);
+      print('修改:${baseBean.code}');
+      if (baseBean.code != null && baseBean.error != null) {
+        NavigatorConfig.getPopNavigator(context);
+        MethodConfig.handToast(baseBean.error);
+      } else {
+        MethodConfig.handToast(CodeConfig.SUCCEED);
+        NavigatorConfig.getPopNavigator(context);
+        NavigatorConfig.getPopNavigator(context);
+      }
+      return baseBean.code;
     }
-    var url = HttpBase.UPDATE_USER_PASSWORD+objectId;
-    Map map={'oldPassword':oldPassword,'newPassword':newPassword};
-    var body=JSON.encode(map);
-    Response response = await post(url, body: body,headers: HttpBase.HEADS);
-    Map<String,dynamic> s=JSON.decode(response.body);
-    var baseBean=new BaseBean.fromJson(s);
-    print('修改:${baseBean.code}');
-    if(baseBean.code!=null&&baseBean.error!=null){
-      NavigatorConfig.getPopNavigator(context);
-      MethodConfig.handToast(baseBean.error);
-    }else{
-      MethodConfig.handToast(CodeConfig.SUCCEED);
-      NavigatorConfig.getPopNavigator(context);
-      NavigatorConfig.getPopNavigator(context);
-    }
-    return baseBean.code;
   }
 
 
@@ -174,9 +175,9 @@ class HttpLoader{
     getLoad(context);
     var url = HttpBase.REQUEST_PASSWORD_RESET;
     Map map={'email':email};
-    var body=JSON.encode(map);
+    var body=json.encode(map);
     Response response = await post(url, body: body,headers: HttpBase.HEADS);
-    Map<String,dynamic> s=JSON.decode(response.body);
+    Map<String,dynamic> s=json.decode(response.body);
     var baseBean=new BaseBean.fromJson(s);
     print('修改:${baseBean.code}');
     if(baseBean.code!=null&&baseBean.error!=null){
@@ -215,13 +216,13 @@ class HttpLoader{
     SharedPreferences sp=await SpConfig.preferences;
     String emain=sp.getString(SpConfig.EMAIL);
     Map map={'data-binary':fileName};
-    var body=JSON.encode(map);
+    var body=json.encode(map);
     String value=fileName.substring(fileName.lastIndexOf('.')+1,fileName.length);
     int currentTime=new DateTime.now().millisecondsSinceEpoch;
     var url = HttpBase.FILES+emain+currentTime.toString()+'.'+value;
     Response response = await post(url, body: body,headers: HttpBase.getHeads(value));
     print('tu:'+response.body);
-    Map<String,dynamic> s=JSON.decode(response.body);
+    Map<String,dynamic> s=json.decode(response.body);
     var baseBean=new BaseBean.fromJson(s);
     print('修改:${baseBean.code}');
     if(baseBean.code!=null&&baseBean.error!=null){
